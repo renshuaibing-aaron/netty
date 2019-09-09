@@ -150,9 +150,11 @@ public abstract class SingleThreadEventExecutor extends AbstractScheduledEventEx
     protected SingleThreadEventExecutor(EventExecutorGroup parent, Executor executor,
                                         boolean addTaskWakesUp, int maxPendingTasks,
                                         RejectedExecutionHandler rejectedHandler) {
+        //什么时间创建线程
         super(parent);
         this.addTaskWakesUp = addTaskWakesUp;
         this.maxPendingTasks = Math.max(16, maxPendingTasks);
+        System.out.println("=======executor============"+executor);
         this.executor = ObjectUtil.checkNotNull(executor, "executor");
         taskQueue = newTaskQueue(this.maxPendingTasks);
         rejectedExecutionHandler = ObjectUtil.checkNotNull(rejectedHandler, "rejectedHandler");
@@ -195,6 +197,7 @@ public abstract class SingleThreadEventExecutor extends AbstractScheduledEventEx
      * @see Queue#poll()
      */
     protected Runnable pollTask() {
+     //   System.out.println("====pollTask=======");
         assert inEventLoop();
         return pollTaskFrom(taskQueue);
     }
@@ -291,6 +294,7 @@ public abstract class SingleThreadEventExecutor extends AbstractScheduledEventEx
      * @see Queue#isEmpty()
      */
     protected boolean hasTasks() {
+        //System.out.println("=====hasTasks================");
         assert inEventLoop();
         return !taskQueue.isEmpty();
     }
@@ -472,6 +476,7 @@ public abstract class SingleThreadEventExecutor extends AbstractScheduledEventEx
 
     @Override
     public boolean inEventLoop(Thread thread) {
+
         return thread == this.thread;
     }
 
@@ -725,12 +730,18 @@ public abstract class SingleThreadEventExecutor extends AbstractScheduledEventEx
             throw new NullPointerException("task");
         }
 
+        //判断当前线程是否为该NioEventLoop所关联的线程，如果是，则添加任务到任务队列中，如果不是，则先启动线程，然后添加任务到任务队列中去
+
         boolean inEventLoop = inEventLoop();
         if (inEventLoop) {
+            System.out.println("===SingleThreadEventExecutor===是当前线程=加入队列============"+task.toString());
             addTask(task);
         } else {
+            //启动该NioEventLoop所关联的线程，然后添加任务到任务队列中去
             startThread();
+            System.out.println("===SingleThreadEventExecutor===不是当前线程，启动线程加入队列========="+task.toString());
             addTask(task);
+            // //如果发现该线程已经关闭则移除任务并拒绝
             if (isShutdown() && removeTask(task)) {
                 reject();
             }
@@ -831,59 +842,67 @@ public abstract class SingleThreadEventExecutor extends AbstractScheduledEventEx
 
     private void doStartThread() {
         assert thread == null;
-        executor.execute(() -> {
-            thread = Thread.currentThread();
-            if (interrupted) {
-                thread.interrupt();
-            }
-
-            boolean success = false;
-            updateLastExecutionTime();
-            try {
-                SingleThreadEventExecutor.this.run();
-                success = true;
-            } catch (Throwable t) {
-                logger.warn("Unexpected exception from an event executor: ", t);
-            } finally {
-                for (; ; ) {
-                    int oldState = state;
-                    if (oldState >= ST_SHUTTING_DOWN || STATE_UPDATER.compareAndSet(
-                            SingleThreadEventExecutor.this, oldState, ST_SHUTTING_DOWN)) {
-                        break;
-                    }
+        System.out.println("======executor========"+executor);
+        //executor   ： ThreadPerTaskExecutor
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                thread = Thread.currentThread();
+                if (interrupted) {
+                    thread.interrupt();
                 }
 
-                // Check if confirmShutdown() was called at the end of the loop.
-                if (success && gracefulShutdownStartTime == 0) {
-                    logger.error("Buggy " + EventExecutor.class.getSimpleName() + " implementation; " +
-                            SingleThreadEventExecutor.class.getSimpleName() + ".confirmShutdown() must be called " +
-                            "before run() implementation terminates.");
-                }
-
+                boolean success = false;
+                updateLastExecutionTime();
                 try {
-                    // Run all remaining tasks and shutdown hooks.
+                    //这是什么
+                    System.out.println("======NioEventLoop.run:调用了NioEventLoop类中的run方法=============");
+                    SingleThreadEventExecutor.this.run();
+                    success = true;
+                } catch (Throwable t) {
+                    logger.warn("Unexpected exception from an event executor: ", t);
+                } finally {
                     for (; ; ) {
-                        if (confirmShutdown()) {
+                        int oldState = state;
+                        if (oldState >= ST_SHUTTING_DOWN || STATE_UPDATER.compareAndSet(
+                                SingleThreadEventExecutor.this, oldState, ST_SHUTTING_DOWN)) {
                             break;
                         }
                     }
-                } finally {
-                    try {
-                        cleanup();
-                    } finally {
-                        STATE_UPDATER.set(SingleThreadEventExecutor.this, ST_TERMINATED);
-                        threadLock.release();
-                        if (!taskQueue.isEmpty()) {
-                            logger.warn(
-                                    "An event executor terminated with " +
-                                            "non-empty task queue (" + taskQueue.size() + ')');
-                        }
 
-                        terminationFuture.setSuccess(null);
+                    // Check if confirmShutdown() was called at the end of the loop.
+                    if (success && gracefulShutdownStartTime == 0) {
+                        logger.error("Buggy " + EventExecutor.class.getSimpleName() + " implementation; " +
+                                SingleThreadEventExecutor.class.getSimpleName() + ".confirmShutdown() must be called " +
+                                "before run() implementation terminates.");
+                    }
+
+                    try {
+                        // Run all remaining tasks and shutdown hooks.
+                        for (; ; ) {
+                            if (confirmShutdown()) {
+                                break;
+                            }
+                        }
+                    } finally {
+                        try {
+                            cleanup();
+                        } finally {
+                            STATE_UPDATER.set(SingleThreadEventExecutor.this, ST_TERMINATED);
+                            threadLock.release();
+                            if (!taskQueue.isEmpty()) {
+                                logger.warn(
+                                        "An event executor terminated with " +
+                                                "non-empty task queue (" + taskQueue.size() + ')');
+                            }
+
+                            terminationFuture.setSuccess(null);
+                        }
                     }
                 }
             }
         });
+
     }
 
     private static final class DefaultThreadProperties implements ThreadProperties {

@@ -12,6 +12,7 @@
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
  * License for the specific language governing permissions and limitations
  * under the License.
+ * EventLoop是一个极为重要的组件，它翻译过来称为事件循环，一个EventLoop将被分配给一个Channel，来负责这个Channel的整个生命周期之内的所有事件
  */
 package io.netty.channel;
 

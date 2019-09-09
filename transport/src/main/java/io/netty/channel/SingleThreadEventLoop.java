@@ -84,6 +84,7 @@ public abstract class SingleThreadEventLoop extends SingleThreadEventExecutor im
     @Deprecated
     @Override
     public ChannelFuture register(final Channel channel, final ChannelPromise promise) {
+        System.out.println("=========注册========");
         if (channel == null) {
             throw new NullPointerException("channel");
         }

@@ -30,6 +30,7 @@ public final class ThreadPerTaskExecutor implements Executor {
 
     @Override
     public void execute(Runnable command) {
+        System.out.println("====ThreadPerTaskExecutor==创建线程==============");
         threadFactory.newThread(command).start();
     }
 }

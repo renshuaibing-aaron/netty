@@ -139,6 +139,7 @@ public class ServerBootstrap extends AbstractBootstrap<ServerBootstrap, ServerCh
 
     @Override
     void init(Channel channel) throws Exception {
+        System.out.println("===channel init=======");
         final Map<ChannelOption<?>, Object> options = options0();
         synchronized (options) {
             setChannelOptions(channel, options, logger);
@@ -175,15 +176,24 @@ public class ServerBootstrap extends AbstractBootstrap<ServerBootstrap, ServerCh
                     pipeline.addLast(handler);
                 }
 
+                //此处进行创建线程
                 ch.eventLoop().execute(new Runnable() {
                     @Override
                     public void run() {
+                        System.out.println("=======执行线程增加监听器pipeline============");
                         pipeline.addLast(new ServerBootstrapAcceptor(
                                 ch, currentChildGroup, currentChildHandler, currentChildOptions, currentChildAttrs));
+                    }
+
+                    @Override
+                    public String toString() {
+                        return "=======线程名字增加监听器pipeline===============";
                     }
                 });
             }
         });
+
+        System.out.println("===========ceshi================");
     }
 
     @Override

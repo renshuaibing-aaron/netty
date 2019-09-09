@@ -68,6 +68,7 @@ public class StringDecoder extends MessageToMessageDecoder<ByteBuf> {
      * Creates a new instance with the specified character set.
      */
     public StringDecoder(Charset charset) {
+        System.out.println("=========StringDecoder解码。StringDecoder===============");
         if (charset == null) {
             throw new NullPointerException("charset");
         }
@@ -76,6 +77,7 @@ public class StringDecoder extends MessageToMessageDecoder<ByteBuf> {
 
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf msg, List<Object> out) throws Exception {
+        System.out.println("=========StringDecoder解码。decode===============");
         out.add(msg.toString(charset));
     }
 }

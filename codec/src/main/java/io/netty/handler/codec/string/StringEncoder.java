@@ -58,6 +58,7 @@ public class StringEncoder extends MessageToMessageEncoder<CharSequence> {
      * Creates a new instance with the current system character set.
      */
     public StringEncoder() {
+
         this(Charset.defaultCharset());
     }
 
@@ -65,6 +66,7 @@ public class StringEncoder extends MessageToMessageEncoder<CharSequence> {
      * Creates a new instance with the specified character set.
      */
     public StringEncoder(Charset charset) {
+        System.out.println("=========StringEncoder编码。StringEncoder===============");
         if (charset == null) {
             throw new NullPointerException("charset");
         }
@@ -73,6 +75,8 @@ public class StringEncoder extends MessageToMessageEncoder<CharSequence> {
 
     @Override
     protected void encode(ChannelHandlerContext ctx, CharSequence msg, List<Object> out) throws Exception {
+
+        System.out.println("=========StringEncoder编码=。encode==============");
         if (msg.length() == 0) {
             return;
         }

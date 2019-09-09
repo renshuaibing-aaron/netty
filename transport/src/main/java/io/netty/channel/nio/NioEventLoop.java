@@ -136,6 +136,7 @@ public final class NioEventLoop extends SingleThreadEventLoop {
     private int cancelledKeys;
     private boolean needsToSelectAgain;
 
+    //NioEventLoop这个类的构造方法
     NioEventLoop(NioEventLoopGroup parent, Executor executor, SelectorProvider selectorProvider,
                  SelectStrategy strategy, RejectedExecutionHandler rejectedExecutionHandler) {
         super(parent, executor, false, DEFAULT_MAX_PENDING_TASKS, rejectedExecutionHandler);
@@ -147,6 +148,7 @@ public final class NioEventLoop extends SingleThreadEventLoop {
         }
         provider = selectorProvider;
         final SelectorTuple selectorTuple = openSelector();
+        System.out.println("===========选择器的绑定============");
         selector = selectorTuple.selector;
         unwrappedSelector = selectorTuple.unwrappedSelector;
         selectStrategy = strategy;
@@ -170,6 +172,7 @@ public final class NioEventLoop extends SingleThreadEventLoop {
     private SelectorTuple openSelector() {
         final Selector unwrappedSelector;
         try {
+            System.out.println("==========使用原生的JDK产生一个selector==========");
             unwrappedSelector = provider.openSelector();
         } catch (IOException e) {
             throw new ChannelException("failed to open a new selector", e);
@@ -255,6 +258,7 @@ public final class NioEventLoop extends SingleThreadEventLoop {
 
     @Override
     protected Queue<Runnable> newTaskQueue(int maxPendingTasks) {
+        System.out.println("========创建队列==============");
         // This event loop never calls takeTask()
         return maxPendingTasks == Integer.MAX_VALUE ? PlatformDependent.<Runnable>newMpscQueue()
                                                     : PlatformDependent.<Runnable>newMpscQueue(maxPendingTasks);
@@ -400,8 +404,11 @@ public final class NioEventLoop extends SingleThreadEventLoop {
 
     @Override
     protected void run() {
+        System.out.println("===========NioEventLoop循环执行是不是从中取任务然后执行==========="+Thread.currentThread());
         for (;;) {
             try {
+                //// 当有任务时为了保证任务及时执行采用不阻塞的selectNow获取准备好I/O的连接
+                //当无任务时采用阻塞等待的方式获取连接
                 switch (selectStrategy.calculateStrategy(selectNowSupplier, hasTasks())) {
                     case SelectStrategy.CONTINUE:
                         continue;
@@ -528,6 +535,7 @@ public final class NioEventLoop extends SingleThreadEventLoop {
     }
 
     private void processSelectedKeysPlain(Set<SelectionKey> selectedKeys) {
+        System.out.println("=======处理IO=2=============");
         // check if the set is empty and if so just return to not create garbage by
         // creating a new Iterator every time even if there is nothing to process.
         // See https://github.com/netty/netty/issues/597
@@ -568,6 +576,7 @@ public final class NioEventLoop extends SingleThreadEventLoop {
     }
 
     private void processSelectedKeysOptimized() {
+        //System.out.println("=======处理IO=1=============");
         for (int i = 0; i < selectedKeys.size; ++i) {
             final SelectionKey k = selectedKeys.keys[i];
             // null out entry in the array to allow to have it GC'ed once the Channel close
@@ -595,7 +604,14 @@ public final class NioEventLoop extends SingleThreadEventLoop {
         }
     }
 
+    /**
+     * 检测新链接
+     * @param k
+     * @param ch
+     */
     private void processSelectedKey(SelectionKey k, AbstractNioChannel ch) {
+        System.out.println("Netty 默认通过反射将selector 底层的 HashSet 实现转为数组优化\n" +
+                "处理每个 ketSet 时都会取到对应的 attachment,即在向 selector注册 io 事件时绑定的经过 Netty 封装后的 channel");
         final AbstractNioChannel.NioUnsafe unsafe = ch.unsafe();
         if (!k.isValid()) {
             final EventLoop eventLoop;
@@ -730,6 +746,7 @@ public final class NioEventLoop extends SingleThreadEventLoop {
             int selectCnt = 0;
             long currentTimeNanos = System.nanoTime();
             long selectDeadLineNanos = currentTimeNanos + delayNanos(currentTimeNanos);
+           // System.out.println("========执行至此,说明已进行了一次阻塞式的 select 操作============");
             for (;;) {
                 long timeoutMillis = (selectDeadLineNanos - currentTimeNanos + 500000L) / 1000000L;
                 if (timeoutMillis <= 0) {
@@ -745,6 +762,7 @@ public final class NioEventLoop extends SingleThreadEventLoop {
                 // If we don't, the task might be pended until select operation was timed out.
                 // It might be pended until idle timeout if IdleStateHandler existed in pipeline.
                 if (hasTasks() && wakenUp.compareAndSet(false, true)) {
+                    //非阻塞式,可以立即返回
                     selector.selectNow();
                     selectCnt = 1;
                     break;

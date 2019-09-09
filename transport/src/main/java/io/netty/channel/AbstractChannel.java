@@ -74,7 +74,7 @@ public abstract class AbstractChannel extends DefaultAttributeMap implements Cha
 
     /**
      * Creates a new instance.
-     *
+     *这里创建Channel
      * @param parent
      *        the parent of this channel. {@code null} if there's no parent.
      */
@@ -115,6 +115,7 @@ public abstract class AbstractChannel extends DefaultAttributeMap implements Cha
      * Returns a new {@link DefaultChannelPipeline} instance.
      */
     protected DefaultChannelPipeline newChannelPipeline() {
+        System.out.println("=======DefaultChannelPipeline类的实例初始化了一个 pipeline ==============");
         return new DefaultChannelPipeline(this);
     }
 
@@ -457,6 +458,7 @@ public abstract class AbstractChannel extends DefaultAttributeMap implements Cha
 
         @Override
         public final void register(EventLoop eventLoop, final ChannelPromise promise) {
+            System.out.println("========AbstractChannel#AbstractUnsafe.register==============");
             if (eventLoop == null) {
                 throw new NullPointerException("eventLoop");
             }
@@ -476,10 +478,17 @@ public abstract class AbstractChannel extends DefaultAttributeMap implements Cha
                 register0(promise);
             } else {
                 try {
+
                     eventLoop.execute(new Runnable() {
                         @Override
                         public void run() {
+                            System.out.println("=======执行线程=register0=============");
                             register0(promise);
+                        }
+
+                        @Override
+                        public String toString() {
+                            return "======线程名字==register0==========";
                         }
                     });
                 } catch (Throwable t) {
@@ -566,7 +575,13 @@ public abstract class AbstractChannel extends DefaultAttributeMap implements Cha
                 invokeLater(new Runnable() {
                     @Override
                     public void run() {
+                        System.out.println("======执行线程fireChannelActive===========");
                         pipeline.fireChannelActive();
+                    }
+
+                    @Override
+                    public String toString() {
+                        return "======线程名字=====fireChannelActive==============";
                     }
                 });
             }
@@ -720,6 +735,7 @@ public abstract class AbstractChannel extends DefaultAttributeMap implements Cha
                             doClose0(promise);
                         } finally {
                             // Call invokeLater so closeAndDeregister is executed in the EventLoop again!
+
                             invokeLater(new Runnable() {
                                 @Override
                                 public void run() {

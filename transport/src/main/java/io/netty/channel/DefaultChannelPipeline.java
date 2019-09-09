@@ -40,6 +40,8 @@ import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.atomic.AtomicReferenceFieldUpdater;
 
 /**
+ * DefaultChannelPipeline 中, 维护了一个以 AbstractChannelHandlerContext 为节点的双向链表,
+ * 其中此链表是 以head（HeadContext）作为头，以tail（TailContext）作为尾的双向链表，这个链表是 Netty 实现 Pipeline 机制的关键
  * The default {@link ChannelPipeline} implementation.  It is usually created
  * by a {@link Channel} implementation when the {@link Channel} is created.
  */
@@ -90,10 +92,12 @@ public class DefaultChannelPipeline implements ChannelPipeline {
     private boolean registered;
 
     protected DefaultChannelPipeline(Channel channel) {
+        //首先将与之关联的Channel保存在属性channel中，
         this.channel = ObjectUtil.checkNotNull(channel, "channel");
         succeededFuture = new SucceededChannelFuture(channel, null);
         voidPromise =  new VoidChannelPromise(channel, true);
 
+        //双向链表
         tail = new TailContext(this);
         head = new HeadContext(this);
 
@@ -205,8 +209,10 @@ public class DefaultChannelPipeline implements ChannelPipeline {
     public final ChannelPipeline addLast(EventExecutorGroup group, String name, ChannelHandler handler) {
         final AbstractChannelHandlerContext newCtx;
         synchronized (this) {
+            ////检查是否有重复的名字
             checkMultiplicity(handler);
 
+            //Pipeline中是以AbstractChannelHandlerContext为节点的双向链表。
             newCtx = newContext(group, filterName(name, handler), handler);
 
             addLast0(newCtx);

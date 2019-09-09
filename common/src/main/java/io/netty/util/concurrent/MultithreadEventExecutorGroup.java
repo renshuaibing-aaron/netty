@@ -72,15 +72,19 @@ public abstract class MultithreadEventExecutorGroup extends AbstractEventExecuto
             throw new IllegalArgumentException(String.format("nThreads: %d (expected: > 0)", nThreads));
         }
 
+        System.out.println("======11111111==============");
         if (executor == null) {
-            executor = new ThreadPerTaskExecutor(newDefaultThreadFactory());
+            //线程创建器  子类MultithreadEventLoopGroup里面的方法
+            ThreadFactory threadFactory = newDefaultThreadFactory();
+            executor = new ThreadPerTaskExecutor(threadFactory);
         }
 
         children = new EventExecutor[nThreads];
-
+        //产生nTreads个NioEventLoop对象保存在children数组中
         for (int i = 0; i < nThreads; i ++) {
             boolean success = false;
             try {
+                //怎么实现 NioEventLoopGroup
                 children[i] = newChild(executor, args);
                 success = true;
             } catch (Exception e) {
@@ -107,7 +111,7 @@ public abstract class MultithreadEventExecutorGroup extends AbstractEventExecuto
                 }
             }
         }
-
+        System.out.println("======创建线程选择器=================");
         chooser = chooserFactory.newChooser(children);
 
         final FutureListener<Object> terminationListener = future -> {
@@ -126,6 +130,8 @@ public abstract class MultithreadEventExecutorGroup extends AbstractEventExecuto
     }
 
     protected ThreadFactory newDefaultThreadFactory() {
+        System.out.println("========newDefaultThreadFactory====== getClass========="+getClass());
+        ////getClass()为：NioEventLoopGroup.class
         return new DefaultThreadFactory(getClass());
     }
 

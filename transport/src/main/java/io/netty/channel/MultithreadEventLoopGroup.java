@@ -70,6 +70,7 @@ public abstract class MultithreadEventLoopGroup extends MultithreadEventExecutor
 
     @Override
     protected ThreadFactory newDefaultThreadFactory() {
+        System.out.println("======22222=================="+getClass());//NioEventLoopGroup
         return new DefaultThreadFactory(getClass(), Thread.MAX_PRIORITY);
     }
 

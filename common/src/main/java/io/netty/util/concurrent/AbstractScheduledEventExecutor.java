@@ -140,6 +140,7 @@ public abstract class AbstractScheduledEventExecutor extends AbstractEventExecut
 
     @Override
     public ScheduledFuture<?> schedule(Runnable command, long delay, TimeUnit unit) {
+        System.out.println("==========执行定时任务=========");
         ObjectUtil.checkNotNull(command, "command");
         ObjectUtil.checkNotNull(unit, "unit");
         if (delay < 0) {
@@ -198,6 +199,7 @@ public abstract class AbstractScheduledEventExecutor extends AbstractEventExecut
 
     <V> ScheduledFuture<V> schedule(final ScheduledFutureTask<V> task) {
         if (inEventLoop()) {
+            System.out.println("======scheduledTaskQueue().add(task);================");
             scheduledTaskQueue().add(task);
         } else {
             execute(() -> scheduledTaskQueue().add(task));

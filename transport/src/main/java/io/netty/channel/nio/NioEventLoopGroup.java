@@ -47,7 +47,7 @@ public class NioEventLoopGroup extends MultithreadEventLoopGroup {
      * Create a new instance using the specified number of threads, {@link ThreadFactory} and the
      * {@link SelectorProvider} which is returned by {@link SelectorProvider#provider()}.
      */
-    public NioEventLoopGroup(int nThreads) {
+    public NioEventLoopGroup(int nThreads) {  //1
         this(nThreads, (Executor) null);
     }
 
@@ -60,6 +60,7 @@ public class NioEventLoopGroup extends MultithreadEventLoopGroup {
     }
 
     public NioEventLoopGroup(int nThreads, Executor executor) {
+        //(1,null,*)//这是什么意思
         this(nThreads, executor, SelectorProvider.provider());
     }
 
@@ -123,6 +124,7 @@ public class NioEventLoopGroup extends MultithreadEventLoopGroup {
 
     @Override
     protected EventLoop newChild(Executor executor, Object... args) throws Exception {
+        System.out.println("********* 创建NioEventLoop*************");
         return new NioEventLoop(this, executor, (SelectorProvider) args[0],
             ((SelectStrategyFactory) args[1]).newSelectStrategy(), (RejectedExecutionHandler) args[2]);
     }
