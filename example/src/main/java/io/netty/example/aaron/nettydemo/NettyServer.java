@@ -32,14 +32,22 @@ public class NettyServer {
         System.out.println("=====================");
         EventLoopGroup bossGroup = new NioEventLoopGroup(1);
         //负责处理客户端i/o事件、task任务、监听任务组
-        EventLoopGroup workerGroup = new NioEventLoopGroup(1);
+        EventLoopGroup workerGroup = new NioEventLoopGroup(2);
         //启动 NIO 服务的辅助启动类
         ServerBootstrap bootstrap = new ServerBootstrap();
+        //一个是group，一个是channelFactory，在这里可以想一想这两个参数是在哪里以及何时被赋值的？
+        // 其中是将bossGroup赋值给了group,将BootstrapChannelFactory赋值给了channelFactory.
+        //2.设置group：ServerBootstrap继承AbstractBootstrap，
+        // bossgroup是设置AbstractBootstrap的group属性，work是设置ServerBootstrap的childGroup属性
         bootstrap.group(bossGroup, workerGroup);
         //配置 Channel
         ServerBootstrap channel1 = bootstrap.channel(NioServerSocketChannel.class);
 
-         bootstrap.handler(new SimpleServerHandler ());
+        //3.设置channel：未来channel的属性设置就是根据我们传入的class,NioServerSocketChannel只实现了bind相关方法，connect没有实现，所以NioServerSocketChannel只适合服务端
+        // 4.设置loaclAddress:设置localAddress
+        //5.childHandler和handler：handler 字段与 accept 过程有关, 即这个 handler 负责处理客户端的连接请求; 而 childHandler 就是负责和客户端的连接的 IO 交互.
+        //6.option和childoption：option 字段与 accept 过程有关, 即这个 handler 负责处理客户端的连接请求; 而 childoption 就是负责和客户端的连接的 IO 交互.
+        bootstrap.handler(new SimpleServerHandler());
         bootstrap.childHandler(new ServerIniterHandler());
         //BACKLOG用于构造服务端套接字ServerSocket对象，
         // 标识当服务器请求处理线程全满时，用于临时存放已完成三次握手的请求的队列的最大长度
@@ -65,7 +73,7 @@ public class NettyServer {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         new NettyServer(8899).run();
     }
 }

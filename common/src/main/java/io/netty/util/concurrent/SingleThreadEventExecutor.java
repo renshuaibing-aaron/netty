@@ -724,6 +724,7 @@ public abstract class SingleThreadEventExecutor extends AbstractScheduledEventEx
         return isTerminated();
     }
 
+    //这里只是加入线程里面
     @Override
     public void execute(Runnable task) {
         if (task == null) {
@@ -844,6 +845,7 @@ public abstract class SingleThreadEventExecutor extends AbstractScheduledEventEx
         assert thread == null;
         System.out.println("======executor========"+executor);
         //executor   ： ThreadPerTaskExecutor
+        //这个方法是new 个线程并且启动
         executor.execute(new Runnable() {
             @Override
             public void run() {

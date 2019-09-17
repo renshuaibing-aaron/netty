@@ -160,6 +160,7 @@ public class Bootstrap extends AbstractBootstrap<Bootstrap, Channel> {
      * @see #connect()
      */
     private ChannelFuture doResolveAndConnect(final SocketAddress remoteAddress, final SocketAddress localAddress) {
+        System.out.println("====================");
         //通过initAndRegister()方法得到一个ChannelFuture的实例regFuture
         final ChannelFuture regFuture = initAndRegister();
         final Channel channel = regFuture.channel();

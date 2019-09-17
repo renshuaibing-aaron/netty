@@ -71,6 +71,7 @@ public class NioServerSocketChannel extends AbstractNioMessageChannel
      */
     public NioServerSocketChannel() {
 
+        //newSocket的作用利用SelectorProvider产生一个SocketChannelImpl对象
         this(newSocket(DEFAULT_SELECTOR_PROVIDER));
     }
 
@@ -86,7 +87,9 @@ public class NioServerSocketChannel extends AbstractNioMessageChannel
      */
     public NioServerSocketChannel(ServerSocketChannel channel) {
 
+        //设置SelectionKey.OP_ACCEPT事件
         super(null, channel, SelectionKey.OP_ACCEPT);
+        //设置了config属性
         config = new NioServerSocketChannelConfig(this, javaChannel().socket());
     }
 
@@ -127,6 +130,9 @@ public class NioServerSocketChannel extends AbstractNioMessageChannel
 
     @Override
     protected void doBind(SocketAddress localAddress) throws Exception {
+        //上面方法中javaChannel()方法返回的是NioServerSocketChannel实例初始化时所产生的Java NIO ServerSocketChannel实例
+        // （更具体点为ServerSocketChannelImple实例）。
+        // 等价于语句serverSocketChannel.socket().bind(localAddress)完成了指定端口的绑定，这样就开始监听此端口
         if (PlatformDependent.javaVersion() >= 7) {
             javaChannel().bind(localAddress, config.getBacklog());
         } else {

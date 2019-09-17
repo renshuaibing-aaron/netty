@@ -81,7 +81,9 @@ public abstract class AbstractChannel extends DefaultAttributeMap implements Cha
     protected AbstractChannel(Channel parent) {
         this.parent = parent;
         id = newId();
+        //设置unsafe属性主要作用为：用来负责底层的connect、register、read和write等操作。
         unsafe = newUnsafe();
+        //设置pipeline属性
         pipeline = newChannelPipeline();
     }
 
@@ -462,6 +464,7 @@ public abstract class AbstractChannel extends DefaultAttributeMap implements Cha
             if (eventLoop == null) {
                 throw new NullPointerException("eventLoop");
             }
+            ////判断该channel是否已经被注册到EventLoop中
             if (isRegistered()) {
                 promise.setFailure(new IllegalStateException("registered to an event loop already"));
                 return;
@@ -472,13 +475,24 @@ public abstract class AbstractChannel extends DefaultAttributeMap implements Cha
                 return;
             }
 
+             //1 将eventLoop设置在NioServerSocketChannel上
             AbstractChannel.this.eventLoop = eventLoop;
 
+            //判断当前线程是否为该EventLoop中拥有的线程，如果是，则直接注册，如果不是，则添加一个任务到该线程中
+            //为什么
+            boolean b = eventLoop.inEventLoop();
+            System.out.println("=========断当前线程是否为该EventLoop中拥有的线程============="+b);
             if (eventLoop.inEventLoop()) {
                 register0(promise);
             } else {
                 try {
-
+                    //如果是NioEventLoop线程则通过register0(promise)方法做实际的注册, 但是我们第一次执行注册方法的时候,
+                    // 如果是服务器channel是则是由server的用户线程执行的, 如果是客户端channel,
+                    // 则是由Boss线程执行的, 所以走到这里均不是当前channel的NioEventLoop的线程,
+                    // 于是会走到下面的eventLoop.execute()方法中
+                    //既然该EventLoop中的线程此时没有执行权，但是我们可以提交一个任务到该线程中，
+                    // 等该EventLoop的线程有执行权的时候就自然而然的会执行此任务，
+                    // 而该任务负责调用register0方法，这样也就达到了调用register0方法的目的
                     eventLoop.execute(new Runnable() {
                         @Override
                         public void run() {
@@ -510,6 +524,7 @@ public abstract class AbstractChannel extends DefaultAttributeMap implements Cha
                     return;
                 }
                 boolean firstRegistration = neverRegistered;
+                //通过调用doRegister()方法完成NioServerSocketChannel的注册
                 doRegister();
                 neverRegistered = false;
                 registered = true;
@@ -519,6 +534,7 @@ public abstract class AbstractChannel extends DefaultAttributeMap implements Cha
                 pipeline.invokeHandlerAddedIfNeeded();
 
                 safeSetSuccess(promise);
+
                 pipeline.fireChannelRegistered();
                 // Only fire a channelActive if the channel has never been registered. This prevents firing
                 // multiple channel actives if the channel is deregistered and re-registered.
@@ -541,6 +557,7 @@ public abstract class AbstractChannel extends DefaultAttributeMap implements Cha
             }
         }
 
+        //NioMessageUnsafe类
         @Override
         public final void bind(final SocketAddress localAddress, final ChannelPromise promise) {
             assertEventLoop();
@@ -564,7 +581,8 @@ public abstract class AbstractChannel extends DefaultAttributeMap implements Cha
 
             boolean wasActive = isActive();
             try {
-                doBind(localAddress);
+                doBind(localAddress);//核心代码
+                //在绑定之前，isActive()方法返回false，绑定之后返回true
             } catch (Throwable t) {
                 safeSetFailure(promise, t);
                 closeIfClosed();
@@ -572,18 +590,18 @@ public abstract class AbstractChannel extends DefaultAttributeMap implements Cha
             }
 
             if (!wasActive && isActive()) {
-                invokeLater(new Runnable() {
+                Runnable runnable = new Runnable() {
                     @Override
                     public void run() {
                         System.out.println("======执行线程fireChannelActive===========");
                         pipeline.fireChannelActive();
                     }
-
                     @Override
                     public String toString() {
                         return "======线程名字=====fireChannelActive==============";
                     }
-                });
+                };
+                invokeLater(runnable);
             }
 
             safeSetSuccess(promise);

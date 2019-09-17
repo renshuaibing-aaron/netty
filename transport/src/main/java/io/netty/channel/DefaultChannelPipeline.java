@@ -992,6 +992,8 @@ public class DefaultChannelPipeline implements ChannelPipeline {
 
     @Override
     public final ChannelFuture bind(SocketAddress localAddress, ChannelPromise promise) {
+        //直接调用了TailContext实例tail的bind
+        System.out.println("======直接调用了TailContext实例tail的bind=======");
         return tail.bind(localAddress, promise);
     }
 
@@ -1282,10 +1284,13 @@ public class DefaultChannelPipeline implements ChannelPipeline {
             // NOOP
         }
 
+        //HeadContext类中的bind方
         @Override
         public void bind(
                 ChannelHandlerContext ctx, SocketAddress localAddress, ChannelPromise promise)
                 throws Exception {
+            System.out.println("======HeadContext类中的bind方============");
+            //unsafe这个字段是在HeadContext构造函数中被初始化的
             unsafe.bind(localAddress, promise);
         }
 

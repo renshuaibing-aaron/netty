@@ -53,6 +53,7 @@ public abstract class AbstractBootstrap<B extends AbstractBootstrap<B, C>, C ext
     @SuppressWarnings("deprecation")
     private volatile ChannelFactory<? extends C> channelFactory;
     private volatile SocketAddress localAddress;
+
     private final Map<ChannelOption<?>, Object> options = new LinkedHashMap<ChannelOption<?>, Object>();
     private final Map<AttributeKey<?>, Object> attrs = new LinkedHashMap<AttributeKey<?>, Object>();
     private volatile ChannelHandler handler;
@@ -209,6 +210,7 @@ public abstract class AbstractBootstrap<B extends AbstractBootstrap<B, C>, C ext
      * call the super method in that case.
      */
     public B validate() {
+         ////这里的group指的是：b.group(bossGroup, workerGroup)代码中的bossGroup
         if (group == null) {
             throw new IllegalStateException("group not set");
         }
@@ -272,7 +274,7 @@ public abstract class AbstractBootstrap<B extends AbstractBootstrap<B, C>, C ext
      * Create a new {@link Channel} and bind it.
      */
     public ChannelFuture bind(SocketAddress localAddress) {
-        validate();
+        validate(); //相关参数检查
         if (localAddress == null) {
             throw new NullPointerException("localAddress");
         }
@@ -281,6 +283,7 @@ public abstract class AbstractBootstrap<B extends AbstractBootstrap<B, C>, C ext
 
     private ChannelFuture doBind(final SocketAddress localAddress) {
         //初始化并且注册
+        //通过initAndRegister()方法得到一个ChannelFuture的实例regFuture
         final ChannelFuture regFuture = initAndRegister();
         final Channel channel = regFuture.channel();
         if (regFuture.cause() != null) {
@@ -294,6 +297,8 @@ public abstract class AbstractBootstrap<B extends AbstractBootstrap<B, C>, C ext
             return promise;
         } else {
             // Registration future is almost always fulfilled already, but just in case it's not.
+            //regFuture会添加一个ChannelFutureListener监听，当initAndRegister执行完成时，
+            // 调用operationComplete方法并执行doBind0进行socket绑定。
             final PendingRegistrationPromise promise = new PendingRegistrationPromise(channel);
             regFuture.addListener(new ChannelFutureListener() {
                 @Override
@@ -318,8 +323,11 @@ public abstract class AbstractBootstrap<B extends AbstractBootstrap<B, C>, C ext
     final ChannelFuture initAndRegister() {
         Channel channel = null;
         try {
+            //：这里的channel为一个NioServerSocketChannel对象
+            //这行代码的作用为通过反射产生来一个NioServerSocketChannel类的实例，其中这个NioServerSocketChannel类对象有这样几个属性：SocketChannel、NioServerSocketChannelConfig 、SelectionKey.OP_ACCEPT事件、NioMessageUnsafe、DefaultChannelPipeline
+            //————————————————
             channel = channelFactory.newChannel();
-            //
+            //init只是初始化了一些基本的配置和属性，以及在pipeline上加入了一个接入器，用来专门接受新连接，并没有启动服务.
             init(channel);
         } catch (Throwable t) {
             if (channel != null) {
@@ -330,6 +338,7 @@ public abstract class AbstractBootstrap<B extends AbstractBootstrap<B, C>, C ext
             return new DefaultChannelPromise(channel, GlobalEventExecutor.INSTANCE).setFailure(t);
         }
 
+        //channel的初始化和注册  MultithreadEventLoopGroup
         ChannelFuture regFuture = config().group().register(channel);
         if (regFuture.cause() != null) {
             if (channel.isRegistered()) {
@@ -367,14 +376,12 @@ public abstract class AbstractBootstrap<B extends AbstractBootstrap<B, C>, C ext
             @Override
             public void run() {
                 System.out.println("======线程执行，绑定端口==========");
-
                 if (regFuture.isSuccess()) {
                     channel.bind(localAddress, promise).addListener(ChannelFutureListener.CLOSE_ON_FAILURE);
                 } else {
                     promise.setFailure(regFuture.cause());
                 }
             }
-
             @Override
             public String toString() {
                 return "===线程名字绑定端口=======";

@@ -402,6 +402,9 @@ public final class NioEventLoop extends SingleThreadEventLoop {
         logger.info("Migrated " + nChannels + " channel(s) to the new Selector.");
     }
 
+    /**
+     * nioEventloop（简称loop），其内部持有一个thread对象，而该loop的run方法正是由该线程执行的
+     */
     @Override
     protected void run() {
         System.out.println("===========NioEventLoop循环执行是不是从中取任务然后执行==========="+Thread.currentThread());

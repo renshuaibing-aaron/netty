@@ -55,12 +55,19 @@ public abstract class AbstractNioMessageChannel extends AbstractNioChannel {
         super.doBeginRead();
     }
 
+    /**
+     *1.当客户端开启socket链接服务端的时候，服务器端就会触发accept事件其中accept和read都是调用unsafe的read方法。
+     *
+     * 2.具体调用的是AbstractNioMessageChannel内部类的NioMessageUnsafe的read方法
+     * （注意如果只是read事件不是accept事件则调用的是AbstractNioByteChannel的内部类NioByteUnsafe的read方法）
+     */
     private final class NioMessageUnsafe extends AbstractNioUnsafe {
 
         private final List<Object> readBuf = new ArrayList<Object>();
 
         @Override
         public void read() {
+            System.out.println("=======accept事件？==========");
             assert eventLoop().inEventLoop();
             final ChannelConfig config = config();
             final ChannelPipeline pipeline = pipeline();

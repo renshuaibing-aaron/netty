@@ -480,6 +480,8 @@ abstract class AbstractChannelHandlerContext extends DefaultAttributeMap
             return promise;
         }
 
+        //所完成的任务就是在pipeline所持有的以AbstractChannelHandlerContext为
+        // 节点的双向链表中从尾节点tail开始向前寻找第一个outbound=true的handler节点
         final AbstractChannelHandlerContext next = findContextOutbound();
         EventExecutor executor = next.executor();
         if (executor.inEventLoop()) {
@@ -498,7 +500,11 @@ abstract class AbstractChannelHandlerContext extends DefaultAttributeMap
     private void invokeBind(SocketAddress localAddress, ChannelPromise promise) {
         if (invokeHandler()) {
             try {
-                ((ChannelOutboundHandler) handler()).bind(this, localAddress, promise);
+                //该方法返回的是其本身，这是因为HeadContext由于其继承AbstractChannelHandlerContext
+                // 以及实现了ChannelHandler接口使其具有Context和Handler双重特性
+                ChannelOutboundHandler HeadContext = (ChannelOutboundHandler) handler();
+
+                HeadContext.bind(this, localAddress, promise);
             } catch (Throwable t) {
                 notifyOutboundHandlerException(t, promise);
             }
@@ -940,6 +946,7 @@ abstract class AbstractChannelHandlerContext extends DefaultAttributeMap
     }
 
     private AbstractChannelHandlerContext findContextOutbound() {
+        System.out.println("=============");
         AbstractChannelHandlerContext ctx = this;
         do {
             ctx = ctx.prev;
