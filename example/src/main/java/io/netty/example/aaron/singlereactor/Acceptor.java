@@ -1,4 +1,4 @@
-package io.netty.example.aaron.single;
+package io.netty.example.aaron.singlereactor;
 
 import java.io.IOException;
 import java.nio.channels.SelectionKey;
