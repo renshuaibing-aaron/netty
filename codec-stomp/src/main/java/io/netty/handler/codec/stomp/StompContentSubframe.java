@@ -22,7 +22,7 @@ import io.netty.channel.ChannelPipeline;
 /**
  * An STOMP chunk which is used for STOMP chunked transfer-encoding. {@link StompSubframeDecoder} generates
  * {@link StompContentSubframe} after {@link StompHeadersSubframe} when the content is large or the encoding of
- * the content is 'chunked.  If you prefer not to receive multiple {@link StompSubframe}s for a single
+ * the content is 'chunked.  If you prefer not to receive multiple {@link StompSubframe}s for a singlereactor
  * {@link StompFrame}, place {@link StompSubframeAggregator} after {@link StompSubframeDecoder} in the
  * {@link ChannelPipeline}.
  */

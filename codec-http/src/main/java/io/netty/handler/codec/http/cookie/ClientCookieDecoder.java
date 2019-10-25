@@ -69,7 +69,7 @@ public final class ClientCookieDecoder extends CookieDecoder {
                 }
                 char c = header.charAt(i);
                 if (c == ',') {
-                    // Having multiple cookies in a single Set-Cookie header is
+                    // Having multiple cookies in a singlereactor Set-Cookie header is
                     // deprecated, modern browsers only parse the first one
                     break loop;
 

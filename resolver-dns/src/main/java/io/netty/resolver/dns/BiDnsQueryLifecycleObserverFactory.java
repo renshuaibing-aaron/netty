@@ -21,7 +21,7 @@ import io.netty.util.internal.UnstableApi;
 import static io.netty.util.internal.ObjectUtil.checkNotNull;
 
 /**
- * Combines two {@link DnsQueryLifecycleObserverFactory} into a single {@link DnsQueryLifecycleObserverFactory}.
+ * Combines two {@link DnsQueryLifecycleObserverFactory} into a singlereactor {@link DnsQueryLifecycleObserverFactory}.
  */
 @UnstableApi
 public final class BiDnsQueryLifecycleObserverFactory implements DnsQueryLifecycleObserverFactory {

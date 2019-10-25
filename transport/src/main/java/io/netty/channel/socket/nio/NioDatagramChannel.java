@@ -332,7 +332,7 @@ public final class NioDatagramChannel
     }
 
     /**
-     * Checks if the specified buffer is a direct buffer and is composed of a single NIO buffer.
+     * Checks if the specified buffer is a direct buffer and is composed of a singlereactor NIO buffer.
      * (We check this because otherwise we need to make it a non-composite buffer.)
      */
     private static boolean isSingleDirectBuffer(ByteBuf buf) {

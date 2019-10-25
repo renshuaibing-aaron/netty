@@ -31,7 +31,7 @@ import static io.netty.util.internal.StringUtil.COMMA;
 import static io.netty.util.internal.StringUtil.unescapeCsvFields;
 
 /**
- * Will add multiple values for the same header as single header with a comma separated list of values.
+ * Will add multiple values for the same header as singlereactor header with a comma separated list of values.
  * <p>
  * Please refer to section <a href="https://tools.ietf.org/html/rfc7230#section-3.2.2">RFC 7230, 3.2.2</a>.
  */

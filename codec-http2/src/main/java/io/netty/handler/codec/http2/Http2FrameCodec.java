@@ -214,7 +214,7 @@ public class Http2FrameCodec extends Http2ConnectionHandler {
             final int delta = initialFlowControlWindowSize - localFlowController.initialWindowSize(connectionStream);
             // Only increase the connection window, don't decrease it.
             if (delta > 0) {
-                // Double the delta just so a single stream can't exhaust the connection window.
+                // Double the delta just so a singlereactor stream can't exhaust the connection window.
                 localFlowController.incrementWindowSize(connectionStream, Math.max(delta << 1, delta));
                 flush(ctx);
             }

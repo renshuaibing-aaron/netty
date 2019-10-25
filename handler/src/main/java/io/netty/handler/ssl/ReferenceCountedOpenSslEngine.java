@@ -235,7 +235,7 @@ public class ReferenceCountedOpenSslEngine extends SSLEngine implements Referenc
      * @param peerPort The peer port.
      * @param jdkCompatibilityMode {@code true} to behave like described in
      *                             https://docs.oracle.com/javase/7/docs/api/javax/net/ssl/SSLEngine.html.
-     *                             {@code false} allows for partial and/or multiple packets to be process in a single
+     *                             {@code false} allows for partial and/or multiple packets to be process in a singlereactor
      *                             wrap or unwrap call.
      * @param leakDetection {@code true} to enable leak detection of this object.
      */
@@ -713,7 +713,7 @@ public class ReferenceCountedOpenSslEngine extends SSLEngine implements Referenc
                         }
                     }
 
-                    // jdkCompatibilityMode will only produce a single TLS packet, and we don't aggregate src buffers,
+                    // jdkCompatibilityMode will only produce a singlereactor TLS packet, and we don't aggregate src buffers,
                     // so we always fix the number of buffers to 1 when checking if the dst buffer is large enough.
                     if (!isBytesAvailableEnoughForWrap(dst.remaining(), srcsLen, 1)) {
                         return new SSLEngineResult(BUFFER_OVERFLOW, getHandshakeStatus(), 0, 0);
@@ -946,7 +946,7 @@ public class ReferenceCountedOpenSslEngine extends SSLEngine implements Referenc
 
             int sslPending = sslPending0();
             int packetLength;
-            // The JDK implies that only a single SSL packet should be processed per unwrap call [1]. If we are in
+            // The JDK implies that only a singlereactor SSL packet should be processed per unwrap call [1]. If we are in
             // JDK compatibility mode then we should honor this, but if not we just wrap as much as possible. If there
             // are multiple records or partial records this may reduce thrashing events through the pipeline.
             // [1] https://docs.oracle.com/javase/7/docs/api/javax/net/ssl/SSLEngine.html
@@ -1060,7 +1060,7 @@ public class ReferenceCountedOpenSslEngine extends SSLEngine implements Referenc
                                     }
                                 } else if (packetLength == 0 || jdkCompatibilityMode) {
                                     // We either consumed all data or we are in jdkCompatibilityMode and have consumed
-                                    // a single TLS packet and should stop consuming until this method is called again.
+                                    // a singlereactor TLS packet and should stop consuming until this method is called again.
                                     break srcLoop;
                                 }
                             } else {

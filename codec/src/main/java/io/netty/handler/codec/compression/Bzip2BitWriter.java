@@ -18,8 +18,8 @@ package io.netty.handler.codec.compression;
 import io.netty.buffer.ByteBuf;
 
 /**
- * A bit writer that allows the writing of single bit booleans, unary numbers, bit strings
- * of arbitrary length (up to 32 bits), and bit aligned 32-bit integers. A single byte at a
+ * A bit writer that allows the writing of singlereactor bit booleans, unary numbers, bit strings
+ * of arbitrary length (up to 32 bits), and bit aligned 32-bit integers. A singlereactor byte at a
  * time is written to the {@link ByteBuf} when sufficient bits have been accumulated.
  */
 final class Bzip2BitWriter {
@@ -56,7 +56,7 @@ final class Bzip2BitWriter {
     }
 
     /**
-     * Writes a single bit to the output {@link ByteBuf}.
+     * Writes a singlereactor bit to the output {@link ByteBuf}.
      * @param value The bit to write
      */
     void writeBoolean(ByteBuf out, final boolean value) {

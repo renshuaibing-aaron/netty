@@ -18,8 +18,8 @@ package io.netty.handler.codec.compression;
 import io.netty.buffer.ByteBuf;
 
 /**
- * An bit reader that allows the reading of single bit booleans, bit strings of
- * arbitrary length (up to 32 bits), and bit aligned 32-bit integers. A single byte
+ * An bit reader that allows the reading of singlereactor bit booleans, bit strings of
+ * arbitrary length (up to 32 bits), and bit aligned 32-bit integers. A singlereactor byte
  * at a time is read from the {@link ByteBuf} when more bits are required.
  */
 class Bzip2BitReader {
@@ -98,7 +98,7 @@ class Bzip2BitReader {
     }
 
     /**
-     * Reads a single bit from the {@link ByteBuf}.
+     * Reads a singlereactor bit from the {@link ByteBuf}.
      * @return {@code true} if the bit read was {@code 1}, otherwise {@code false}
      */
     boolean readBoolean() {

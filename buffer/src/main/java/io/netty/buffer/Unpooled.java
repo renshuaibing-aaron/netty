@@ -803,7 +803,7 @@ public final class Unpooled {
     }
 
     /**
-     * Creates a new single-byte big-endian buffer that holds the specified boolean value.
+     * Creates a new singlereactor-byte big-endian buffer that holds the specified boolean value.
      */
     public static ByteBuf copyBoolean(boolean value) {
         ByteBuf buf = buffer(1);

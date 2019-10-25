@@ -21,7 +21,7 @@ import io.netty.util.ByteProcessor;
 import static io.netty.handler.codec.compression.Bzip2Constants.*;
 
 /**
- * Compresses and writes a single Bzip2 block.<br><br>
+ * Compresses and writes a singlereactor Bzip2 block.<br><br>
  *
  * Block encoding consists of the following stages:<br>
  * 1. Run-Length Encoding[1] - {@link #write(int)}<br>

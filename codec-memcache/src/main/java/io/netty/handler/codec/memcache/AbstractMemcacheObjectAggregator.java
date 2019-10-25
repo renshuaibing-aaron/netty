@@ -24,7 +24,7 @@ import io.netty.util.internal.UnstableApi;
 
 /**
  * A {@link ChannelHandler} that aggregates an {@link MemcacheMessage}
- * and its following {@link MemcacheContent}s into a single {@link MemcacheMessage} with
+ * and its following {@link MemcacheContent}s into a singlereactor {@link MemcacheMessage} with
  * no following {@link MemcacheContent}s.  It is useful when you don't want to take
  * care of memcache messages where the content comes along in chunks. Insert this
  * handler after a AbstractMemcacheObjectDecoder in the {@link ChannelPipeline}.

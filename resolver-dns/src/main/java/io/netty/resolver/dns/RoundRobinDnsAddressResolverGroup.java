@@ -31,7 +31,7 @@ import java.net.InetSocketAddress;
 /**
  * A {@link AddressResolverGroup} of {@link DnsNameResolver}s that supports random selection of destination addresses if
  * multiple are provided by the nameserver. This is ideal for use in applications that use a pool of connections, for
- * which connecting to a single resolved address would be inefficient.
+ * which connecting to a singlereactor resolved address would be inefficient.
  */
 @UnstableApi
 public class RoundRobinDnsAddressResolverGroup extends DnsAddressResolverGroup {

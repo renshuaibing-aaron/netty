@@ -27,7 +27,7 @@ import io.netty.handler.codec.socksx.v5.Socks5InitialRequestDecoder.State;
 import java.util.List;
 
 /**
- * Decodes a single {@link Socks5InitialRequest} from the inbound {@link ByteBuf}s.
+ * Decodes a singlereactor {@link Socks5InitialRequest} from the inbound {@link ByteBuf}s.
  * On successful decode, this decoder will forward the received data to the next handler, so that
  * other handler can remove or replace this decoder later.  On failed decode, this decoder will
  * discard the received data, so that other handler closes the connection later.

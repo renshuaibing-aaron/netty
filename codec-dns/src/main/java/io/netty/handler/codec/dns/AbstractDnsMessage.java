@@ -48,7 +48,7 @@ public abstract class AbstractDnsMessage extends AbstractReferenceCounted implem
     private byte z;
 
     // To reduce the memory footprint of a message,
-    // each of the following fields is a single record or a list of records.
+    // each of the following fields is a singlereactor record or a list of records.
     private Object questions;
     private Object answers;
     private Object authorities;

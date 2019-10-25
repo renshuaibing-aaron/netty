@@ -853,7 +853,7 @@ public final class PlatformDependent {
     }
 
     /**
-     * Create a new {@link Queue} which is safe to use for multiple producers (different threads) and a single
+     * Create a new {@link Queue} which is safe to use for multiple producers (different threads) and a singlereactor
      * consumer (one thread!).
      * @return A MPSC queue which may be unbounded.
      */
@@ -862,7 +862,7 @@ public final class PlatformDependent {
     }
 
     /**
-     * Create a new {@link Queue} which is safe to use for multiple producers (different threads) and a single
+     * Create a new {@link Queue} which is safe to use for multiple producers (different threads) and a singlereactor
      * consumer (one thread!).
      */
     public static <T> Queue<T> newMpscQueue(final int maxCapacity) {
@@ -870,7 +870,7 @@ public final class PlatformDependent {
     }
 
     /**
-     * Create a new {@link Queue} which is safe to use for single producer (one thread!) and a single
+     * Create a new {@link Queue} which is safe to use for singlereactor producer (one thread!) and a singlereactor
      * consumer (one thread!).
      */
     public static <T> Queue<T> newSpscQueue() {
@@ -878,7 +878,7 @@ public final class PlatformDependent {
     }
 
     /**
-     * Create a new {@link Queue} which is safe to use for multiple producers (different threads) and a single
+     * Create a new {@link Queue} which is safe to use for multiple producers (different threads) and a singlereactor
      * consumer (one thread!) with the given fixes {@code capacity}.
      */
     public static <T> Queue<T> newFixedMpscQueue(int capacity) {

@@ -113,7 +113,7 @@ final class MessageFormatter {
     private static final char ESCAPE_CHAR = '\\';
 
     /**
-     * Performs single argument substitution for the 'messagePattern' passed as
+     * Performs singlereactor argument substitution for the 'messagePattern' passed as
      * parameter.
      * <p/>
      * For example,

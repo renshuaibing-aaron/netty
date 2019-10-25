@@ -82,6 +82,7 @@ public abstract class AbstractChannel extends DefaultAttributeMap implements Cha
         this.parent = parent;
         id = newId();
         //设置unsafe属性主要作用为：用来负责底层的connect、register、read和write等操作。
+        //AbstractNioMessageChannel 方法
         unsafe = newUnsafe();
         //设置pipeline属性
         pipeline = newChannelPipeline();

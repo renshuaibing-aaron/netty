@@ -51,8 +51,13 @@ public final class DefaultEventExecutorChooserFactory implements EventExecutorCh
             this.executors = executors;
         }
 
+
+        //这里是著名的 Netty 对性能压榨的一个例子，Netty 对于选取数组中的线程有着2套策略
+        //1.如果数组是偶数，则使用位运算获取下一个EventLoop（单例线程池）（效率高）。
+        //2.如果是奇数，使用取余（效率低）。
         @Override
         public EventExecutor next() {
+            System.out.println("========选取数组中的线程============");
             return executors[idx.getAndIncrement() & executors.length - 1];
         }
     }

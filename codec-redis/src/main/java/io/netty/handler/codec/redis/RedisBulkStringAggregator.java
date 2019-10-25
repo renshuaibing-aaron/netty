@@ -23,7 +23,7 @@ import io.netty.util.internal.UnstableApi;
 
 /**
  * A {@link ChannelHandler} that aggregates an {@link BulkStringHeaderRedisMessage}
- * and its following {@link BulkStringRedisContent}s into a single {@link FullBulkStringRedisMessage}
+ * and its following {@link BulkStringRedisContent}s into a singlereactor {@link FullBulkStringRedisMessage}
  * with no following {@link BulkStringRedisContent}s.  It is useful when you don't want to take
  * care of {@link RedisMessage}s whose transfer encoding is 'chunked'.  Insert this
  * handler after {@link RedisDecoder} in the {@link ChannelPipeline}:

@@ -74,7 +74,7 @@ public class Http2Exception extends Exception {
     }
 
     /**
-     * Use if an error has occurred which can not be isolated to a single stream, but instead applies
+     * Use if an error has occurred which can not be isolated to a singlereactor stream, but instead applies
      * to the entire connection.
      * @param error The type of error as defined by the HTTP/2 specification.
      * @param fmt String with the content and format for the additional debug data.
@@ -86,7 +86,7 @@ public class Http2Exception extends Exception {
     }
 
     /**
-     * Use if an error has occurred which can not be isolated to a single stream, but instead applies
+     * Use if an error has occurred which can not be isolated to a singlereactor stream, but instead applies
      * to the entire connection.
      * @param error The type of error as defined by the HTTP/2 specification.
      * @param cause The object which caused the error.
@@ -100,7 +100,7 @@ public class Http2Exception extends Exception {
     }
 
     /**
-     * Use if an error has occurred which can not be isolated to a single stream, but instead applies
+     * Use if an error has occurred which can not be isolated to a singlereactor stream, but instead applies
      * to the entire connection.
      * @param error The type of error as defined by the HTTP/2 specification.
      * @param fmt String with the content and format for the additional debug data.
@@ -112,7 +112,7 @@ public class Http2Exception extends Exception {
     }
 
     /**
-     * Use if an error which can be isolated to a single stream has occurred.  If the {@code id} is not
+     * Use if an error which can be isolated to a singlereactor stream has occurred.  If the {@code id} is not
      * {@link Http2CodecUtil#CONNECTION_STREAM_ID} then a {@link Http2Exception.StreamException} will be returned.
      * Otherwise the error is considered a connection error and a {@link Http2Exception} is returned.
      * @param id The stream id for which the error is isolated to.
@@ -130,7 +130,7 @@ public class Http2Exception extends Exception {
     }
 
     /**
-     * Use if an error which can be isolated to a single stream has occurred.  If the {@code id} is not
+     * Use if an error which can be isolated to a singlereactor stream has occurred.  If the {@code id} is not
      * {@link Http2CodecUtil#CONNECTION_STREAM_ID} then a {@link Http2Exception.StreamException} will be returned.
      * Otherwise the error is considered a connection error and a {@link Http2Exception} is returned.
      * @param id The stream id for which the error is isolated to.
@@ -172,7 +172,7 @@ public class Http2Exception extends Exception {
     }
 
     /**
-     * Check if an exception is isolated to a single stream or the entire connection.
+     * Check if an exception is isolated to a singlereactor stream or the entire connection.
      * @param e The exception to check.
      * @return {@code true} if {@code e} is an instance of {@link Http2Exception.StreamException}.
      * {@code false} otherwise.
@@ -230,7 +230,7 @@ public class Http2Exception extends Exception {
     }
 
     /**
-     * Represents an exception that can be isolated to a single stream (as opposed to the entire connection).
+     * Represents an exception that can be isolated to a singlereactor stream (as opposed to the entire connection).
      */
     public static class StreamException extends Http2Exception {
         private static final long serialVersionUID = 602472544416984384L;

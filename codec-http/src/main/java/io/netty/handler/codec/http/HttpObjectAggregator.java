@@ -35,7 +35,7 @@ import static io.netty.handler.codec.http.HttpUtil.getContentLength;
 
 /**
  * A {@link ChannelHandler} that aggregates an {@link HttpMessage}
- * and its following {@link HttpContent}s into a single {@link FullHttpRequest}
+ * and its following {@link HttpContent}s into a singlereactor {@link FullHttpRequest}
  * or {@link FullHttpResponse} (depending on if it used to handle requests or responses)
  * with no following {@link HttpContent}s.  It is useful when you don't want to take
  * care of HTTP messages whose transfer encoding is 'chunked'.  Insert this

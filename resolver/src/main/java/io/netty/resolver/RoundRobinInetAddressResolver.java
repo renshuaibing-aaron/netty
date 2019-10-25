@@ -30,7 +30,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * A {@link NameResolver} that resolves {@link InetAddress} and force Round Robin by choosing a single address
+ * A {@link NameResolver} that resolves {@link InetAddress} and force Round Robin by choosing a singlereactor address
  * randomly in {@link #resolve(String)} and {@link #resolve(String, Promise)}
  * if multiple are returned by the {@link NameResolver}.
  * Use {@link #asAddressResolver()} to create a {@link InetSocketAddress} resolver

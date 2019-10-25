@@ -74,7 +74,7 @@ public class NoPriorityByteDistributionBenchmark extends AbstractMicrobenchmark 
     }
 
     /**
-     * Additional counters for a single iteration.
+     * Additional counters for a singlereactor iteration.
      */
     @AuxCounters
     @State(Scope.Thread)

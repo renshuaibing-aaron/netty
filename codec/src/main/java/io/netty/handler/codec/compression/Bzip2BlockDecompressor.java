@@ -18,7 +18,7 @@ package io.netty.handler.codec.compression;
 import static io.netty.handler.codec.compression.Bzip2Constants.*;
 
 /**
- * Reads and decompresses a single Bzip2 block.<br><br>
+ * Reads and decompresses a singlereactor Bzip2 block.<br><br>
  *
  * Block decoding consists of the following stages:<br>
  * 1. Read block header<br>
@@ -253,7 +253,7 @@ final class Bzip2BlockDecompressor {
         }
 
         // Merged-Array Inverse Burrows-Wheeler Transform
-        // Combining the output characters and forward pointers into a single array here, where we
+        // Combining the output characters and forward pointers into a singlereactor array here, where we
         // have already read both of the corresponding values, cuts down on memory accesses in the
         // final walk through the array
         for (int i = 0; i < bwtBlockLength; i++) {

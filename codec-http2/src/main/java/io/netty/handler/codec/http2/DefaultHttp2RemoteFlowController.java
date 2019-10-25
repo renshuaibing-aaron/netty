@@ -38,7 +38,7 @@ import static java.lang.Math.min;
 /**
  * Basic implementation of {@link Http2RemoteFlowController}.
  * <p>
- * This class is <strong>NOT</strong> thread safe. The assumption is all methods must be invoked from a single thread.
+ * This class is <strong>NOT</strong> thread safe. The assumption is all methods must be invoked from a singlereactor thread.
  * Typically this thread is the event loop thread for the {@link ChannelHandlerContext} managed by this class.
  */
 @UnstableApi
@@ -268,7 +268,7 @@ public class DefaultHttp2RemoteFlowController implements Http2RemoteFlowControll
     }
 
     /**
-     * The remote flow control state for a single stream.
+     * The remote flow control state for a singlereactor stream.
      */
     private final class FlowState implements StreamByteDistributor.StreamState {
         private final Http2Stream stream;

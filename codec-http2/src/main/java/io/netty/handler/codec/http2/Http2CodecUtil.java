@@ -262,7 +262,7 @@ public final class Http2CodecUtil {
 
     /**
      * Provides the ability to associate the outcome of multiple {@link ChannelPromise}
-     * objects into a single {@link ChannelPromise} object.
+     * objects into a singlereactor {@link ChannelPromise} object.
      */
     static final class SimpleChannelPromiseAggregator extends DefaultChannelPromise {
         private final ChannelPromise promise;

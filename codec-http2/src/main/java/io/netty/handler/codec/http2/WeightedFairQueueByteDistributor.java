@@ -444,7 +444,7 @@ public final class WeightedFairQueueByteDistributor implements StreamByteDistrib
     }
 
     /**
-     * The remote flow control state for a single stream.
+     * The remote flow control state for a singlereactor stream.
      */
     private final class State implements PriorityQueueNode {
         private static final byte STATE_IS_ACTIVE = 0x1;

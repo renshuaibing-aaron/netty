@@ -38,7 +38,7 @@ import java.util.Map;
  * A <a href="http://tools.ietf.org/html/rfc6265">RFC6265</a> compliant cookie encoder to be used server side,
  * so some fields are sent (Version is typically ignored).
  *
- * As Netty's Cookie merges Expires and MaxAge into one single field, only Max-Age field is sent.
+ * As Netty's Cookie merges Expires and MaxAge into one singlereactor field, only Max-Age field is sent.
  *
  * Note that multiple cookies must be sent as separate "Set-Cookie" headers.
  *
@@ -75,7 +75,7 @@ public final class ServerCookieEncoder extends CookieEncoder {
      *
      * @param name the cookie name
      * @param value the cookie value
-     * @return a single Set-Cookie header value
+     * @return a singlereactor Set-Cookie header value
      */
     public String encode(String name, String value) {
         return encode(new DefaultCookie(name, value));
@@ -85,7 +85,7 @@ public final class ServerCookieEncoder extends CookieEncoder {
      * Encodes the specified cookie into a Set-Cookie header value.
      *
      * @param cookie the cookie
-     * @return a single Set-Cookie header value
+     * @return a singlereactor Set-Cookie header value
      */
     public String encode(Cookie cookie) {
         final String name = checkNotNull(cookie, "cookie").name();

@@ -52,7 +52,7 @@ import java.util.List;
  * {@link ChannelHandler}s expecting {@link HttpObject}
  *
  * For simplicity, it converts to chunked encoding unless the entire stream
- * is a single header.
+ * is a singlereactor header.
  */
 @UnstableApi
 @Sharable

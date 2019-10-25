@@ -46,7 +46,7 @@ final class CipherSuiteConverter {
      * This regular expression assumes that:
      *
      * 1) A is always TLS or SSL, and
-     * 2) D is always a single word.
+     * 2) D is always a singlereactor word.
      */
     private static final Pattern JAVA_CIPHERSUITE_PATTERN =
             Pattern.compile("^(?:TLS|SSL)_((?:(?!_WITH_).)+)_WITH_(.*)_(.*)$");
@@ -61,7 +61,7 @@ final class CipherSuiteConverter {
      * This regular expression assumes that:
      *
      * 1) A has some deterministic pattern as shown below, and
-     * 2) C is always a single word
+     * 2) C is always a singlereactor word
      */
     private static final Pattern OPENSSL_CIPHERSUITE_PATTERN =
             // Be very careful not to break the indentation while editing.

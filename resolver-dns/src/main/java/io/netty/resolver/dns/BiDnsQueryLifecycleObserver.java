@@ -26,7 +26,7 @@ import java.util.List;
 import static io.netty.util.internal.ObjectUtil.checkNotNull;
 
 /**
- * Combines two {@link DnsQueryLifecycleObserver} into a single {@link DnsQueryLifecycleObserver}.
+ * Combines two {@link DnsQueryLifecycleObserver} into a singlereactor {@link DnsQueryLifecycleObserver}.
  */
 @UnstableApi
 public final class BiDnsQueryLifecycleObserver implements DnsQueryLifecycleObserver {

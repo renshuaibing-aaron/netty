@@ -24,7 +24,7 @@ import io.netty.util.internal.PlatformDependent;
 /**
  * A FIFO queue of bytes where producers add bytes by repeatedly adding {@link ByteBuf} and consumers take bytes in
  * arbitrary lengths. This allows producers to add lots of small buffers and the consumer to take all the bytes
- * out in a single buffer. Conversely the producer may add larger buffers and the consumer could take the bytes in
+ * out in a singlereactor buffer. Conversely the producer may add larger buffers and the consumer could take the bytes in
  * many small buffers.
  *
  * <p>Bytes are added and removed with promises. If the last byte of a buffer added with a promise is removed then

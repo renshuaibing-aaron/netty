@@ -128,7 +128,7 @@ final class Bzip2HuffmanStageEncoder {
         // The Huffman allocator needs its input symbol frequencies to be sorted, but we need to
         // return code lengths in the same order as the corresponding frequencies are passed in.
 
-        // The symbol frequency and index are merged into a single array of
+        // The symbol frequency and index are merged into a singlereactor array of
         // integers - frequency in the high 23 bits, index in the low 9 bits.
         //     2^23 = 8,388,608 which is higher than the maximum possible frequency for one symbol in a block
         //     2^9 = 512 which is higher than the maximum possible alphabet size (== 258)

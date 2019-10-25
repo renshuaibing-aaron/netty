@@ -36,7 +36,7 @@ import io.netty.util.internal.UnstableApi;
 /**
  * Basic implementation of {@link Http2LocalFlowController}.
  * <p>
- * This class is <strong>NOT</strong> thread safe. The assumption is all methods must be invoked from a single thread.
+ * This class is <strong>NOT</strong> thread safe. The assumption is all methods must be invoked from a singlereactor thread.
  * Typically this thread is the event loop thread for the {@link ChannelHandlerContext} managed by this class.
  */
 @UnstableApi
@@ -481,7 +481,7 @@ public class DefaultHttp2LocalFlowController implements Http2LocalFlowController
     }
 
     /**
-     * The local flow control state for a single stream that is not in a state where flow controlled frames cannot
+     * The local flow control state for a singlereactor stream that is not in a state where flow controlled frames cannot
      * be exchanged.
      */
     private static final FlowState REDUCED_FLOW_STATE = new FlowState() {

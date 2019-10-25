@@ -147,7 +147,7 @@ public interface Http2RemoteFlowController extends Http2FlowController {
 
         /**
          * Merge the contents of the {@code next} message into this message so they can be written out as one unit.
-         * This allows many small messages to be written as a single DATA frame.
+         * This allows many small messages to be written as a singlereactor DATA frame.
          *
          * @return {@code true} if {@code next} was successfully merged and does not need to be enqueued,
          *     {@code false} otherwise.

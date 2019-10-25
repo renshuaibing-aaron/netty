@@ -697,7 +697,7 @@ public class OpenSslEngineTest extends SSLEngineTest {
             encClientToServerTotal.put(encClientToServer);
             encClientToServerTotal.flip();
 
-            // Unwrap in a single call.
+            // Unwrap in a singlereactor call.
             final int encClientToServerTotalRemaining = encClientToServerTotal.remaining();
             result = server.unwrap(encClientToServerTotal, plainServer);
             assertEquals(SSLEngineResult.Status.OK, result.getStatus());

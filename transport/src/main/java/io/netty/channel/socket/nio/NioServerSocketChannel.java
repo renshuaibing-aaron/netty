@@ -90,6 +90,7 @@ public class NioServerSocketChannel extends AbstractNioMessageChannel
         //设置SelectionKey.OP_ACCEPT事件
         super(null, channel, SelectionKey.OP_ACCEPT);
         //设置了config属性
+        //这个 config 对象用于配置这个 NioServerSocketChannel ，用于外部获取参数和配置
         config = new NioServerSocketChannelConfig(this, javaChannel().socket());
     }
 

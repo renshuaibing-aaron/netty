@@ -168,7 +168,7 @@ public class Http2ConnectionRoundtripTest {
         }).when(clientListener).onHeadersRead(any(ChannelHandlerContext.class), eq(5), any(Http2Headers.class),
                 anyInt(), anyShort(), anyBoolean(), anyInt(), anyBoolean());
 
-        // Create a single stream by sending a HEADERS frame to the server.
+        // Create a singlereactor stream by sending a HEADERS frame to the server.
         final short weight = 16;
         final Http2Headers headers = dummyHeaders();
         runInChannel(clientChannel, new Http2Runnable() {
@@ -196,7 +196,7 @@ public class Http2ConnectionRoundtripTest {
     public void headersWithEndStreamShouldNotSendError() throws Exception {
         bootstrapEnv(1, 1, 2, 1);
 
-        // Create a single stream by sending a HEADERS frame to the server.
+        // Create a singlereactor stream by sending a HEADERS frame to the server.
         final short weight = 16;
         final Http2Headers headers = dummyHeaders();
         runInChannel(clientChannel, new Http2Runnable() {
@@ -588,7 +588,7 @@ public class Http2ConnectionRoundtripTest {
             }
         });
 
-        // Create a single stream by sending a HEADERS frame to the server.
+        // Create a singlereactor stream by sending a HEADERS frame to the server.
         final Http2Headers headers = dummyHeaders();
         runInChannel(clientChannel, new Http2Runnable() {
             @Override
@@ -634,7 +634,7 @@ public class Http2ConnectionRoundtripTest {
             }
         });
 
-        // Create a single stream by sending a HEADERS frame to the server.
+        // Create a singlereactor stream by sending a HEADERS frame to the server.
         runInChannel(clientChannel, new Http2Runnable() {
             @Override
             public void run() throws Http2Exception {
@@ -739,7 +739,7 @@ public class Http2ConnectionRoundtripTest {
             }
         });
 
-        // Create a single stream by sending a HEADERS frame to the server.
+        // Create a singlereactor stream by sending a HEADERS frame to the server.
         final Http2Headers headers = dummyHeaders();
         runInChannel(clientChannel, new Http2Runnable() {
             @Override
@@ -777,7 +777,7 @@ public class Http2ConnectionRoundtripTest {
         // Don't wait for the server to close streams
         http2Client.gracefulShutdownTimeoutMillis(0);
 
-        // Create a single stream by sending a HEADERS frame to the server.
+        // Create a singlereactor stream by sending a HEADERS frame to the server.
         final Http2Headers headers = dummyHeaders();
         runInChannel(clientChannel, new Http2Runnable() {
             @Override

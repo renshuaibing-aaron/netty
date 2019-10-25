@@ -37,7 +37,7 @@ import java.util.NoSuchElementException;
 import static io.netty.util.internal.ObjectUtil.checkNotNull;
 
 /**
- * A virtual buffer which shows multiple buffers as a single merged buffer.  It is recommended to use
+ * A virtual buffer which shows multiple buffers as a singlereactor merged buffer.  It is recommended to use
  * {@link ByteBufAllocator#compositeBuffer()} or {@link Unpooled#wrappedBuffer(ByteBuf...)} instead of calling the
  * constructor explicitly.
  */
@@ -657,7 +657,7 @@ public class CompositeByteBuf extends AbstractReferenceCountedByteBuf implements
                 padding = allocBuffer(paddingLength);
                 padding.setIndex(0, paddingLength);
                 // FIXME: No need to create a padding buffer and consolidate.
-                // Just create a big single buffer and put the current content there.
+                // Just create a big singlereactor buffer and put the current content there.
                 addComponent0(false, components.size(), padding);
                 consolidateIfNeeded();
             }

@@ -24,7 +24,7 @@ import io.netty.handler.codec.TooLongFrameException;
 import java.util.List;
 
 /**
- * A frame decoder for single separate XML based message streams.
+ * A frame decoder for singlereactor separate XML based message streams.
  * <p/>
  * A couple examples will better help illustrate
  * what this decoder actually does.
@@ -36,7 +36,7 @@ import java.util.List;
  * +-----+-----+-----------+
  * </pre>
  * <p/>
- * this decoder would output a single frame:
+ * this decoder would output a singlereactor frame:
  * <p/>
  * <pre>
  * +-----------------+

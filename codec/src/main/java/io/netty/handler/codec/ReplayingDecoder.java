@@ -101,7 +101,7 @@ import java.util.List;
  *     decoder might have to decode the same part of the message over and over
  *     again.</li>
  * <li>You must keep in mind that {@code decode(..)} method can be called many
- *     times to decode a single message.  For example, the following code will
+ *     times to decode a singlereactor message.  For example, the following code will
  *     not work:
  * <pre> public class MyDecoder extends {@link ReplayingDecoder}&lt;{@link Void}&gt; {
  *

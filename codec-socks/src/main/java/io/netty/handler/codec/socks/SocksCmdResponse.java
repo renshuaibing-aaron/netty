@@ -52,7 +52,7 @@ public final class SocksCmdResponse extends SocksResponse {
      * @param cmdStatus status of the response
      * @param addressType type of host parameter
      * @param host host (BND.ADDR field) is address that server used when connecting to the target host.
-     *             When null a value of 4/8 0x00 octets will be used for IPv4/IPv6 and a single 0x00 byte will be
+     *             When null a value of 4/8 0x00 octets will be used for IPv4/IPv6 and a singlereactor 0x00 byte will be
      *             used for domain addressType. Value is converted to ASCII using {@link IDN#toASCII(String)}.
      * @param port port (BND.PORT field) that the server assigned to connect to the target host
      * @throws NullPointerException in case cmdStatus or addressType are missing

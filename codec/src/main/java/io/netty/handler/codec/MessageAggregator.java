@@ -30,11 +30,11 @@ import java.util.List;
 import static io.netty.buffer.Unpooled.EMPTY_BUFFER;
 
 /**
- * An abstract {@link ChannelHandler} that aggregates a series of message objects into a single aggregated message.
+ * An abstract {@link ChannelHandler} that aggregates a series of message objects into a singlereactor aggregated message.
  * <p>
  * 'A series of messages' is composed of the following:
  * <ul>
- * <li>a single start message which optionally contains the first part of the content, and</li>
+ * <li>a singlereactor start message which optionally contains the first part of the content, and</li>
  * <li>1 or more content messages.</li>
  * </ul>
  * The content of the aggregated message will be the merged content of the start message and its following content
@@ -101,7 +101,7 @@ public abstract class MessageAggregator<I, S, C extends ByteBufHolder, O extends
 
     /**
      * Returns {@code true} if and only if the specified message is a start message. Typically, this method is
-     * implemented as a single {@code return} statement with {@code instanceof}:
+     * implemented as a singlereactor {@code return} statement with {@code instanceof}:
      * <pre>
      * return msg instanceof MyStartMessage;
      * </pre>
@@ -110,7 +110,7 @@ public abstract class MessageAggregator<I, S, C extends ByteBufHolder, O extends
 
     /**
      * Returns {@code true} if and only if the specified message is a content message. Typically, this method is
-     * implemented as a single {@code return} statement with {@code instanceof}:
+     * implemented as a singlereactor {@code return} statement with {@code instanceof}:
      * <pre>
      * return msg instanceof MyContentMessage;
      * </pre>
@@ -119,7 +119,7 @@ public abstract class MessageAggregator<I, S, C extends ByteBufHolder, O extends
 
     /**
      * Returns {@code true} if and only if the specified message is the last content message. Typically, this method is
-     * implemented as a single {@code return} statement with {@code instanceof}:
+     * implemented as a singlereactor {@code return} statement with {@code instanceof}:
      * <pre>
      * return msg instanceof MyLastContentMessage;
      * </pre>
@@ -146,7 +146,7 @@ public abstract class MessageAggregator<I, S, C extends ByteBufHolder, O extends
     /**
      * Returns the maximum number of components in the cumulation buffer.  If the number of
      * the components in the cumulation buffer exceeds this value, the components of the
-     * cumulation buffer are consolidated into a single component, involving memory copies.
+     * cumulation buffer are consolidated into a singlereactor component, involving memory copies.
      * The default value of this property is {@value #DEFAULT_MAX_COMPOSITEBUFFER_COMPONENTS}.
      */
     public final int maxCumulationBufferComponents() {
@@ -156,7 +156,7 @@ public abstract class MessageAggregator<I, S, C extends ByteBufHolder, O extends
     /**
      * Sets the maximum number of components in the cumulation buffer.  If the number of
      * the components in the cumulation buffer exceeds this value, the components of the
-     * cumulation buffer are consolidated into a single component, involving memory copies.
+     * cumulation buffer are consolidated into a singlereactor component, involving memory copies.
      * The default value of this property is {@value #DEFAULT_MAX_COMPOSITEBUFFER_COMPONENTS}
      * and its minimum allowed value is {@code 2}.
      */

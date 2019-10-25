@@ -38,7 +38,7 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * Helper class representing a single header entry. Used by the benchmarks.
+ * Helper class representing a singlereactor header entry. Used by the benchmarks.
  */
 class HpackHeader {
     private static final String ALPHABET =

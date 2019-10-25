@@ -31,10 +31,10 @@ public class HostsFileParserTest {
     @Test
     public void testParse() throws IOException {
         String hostsString = new StringBuilder()
-                .append("127.0.0.1 host1").append("\n") // single hostname, separated with blanks
+                .append("127.0.0.1 host1").append("\n") // singlereactor hostname, separated with blanks
                 .append("::1 host1").append("\n") // same as above, but IPv6
                 .append("\n") // empty line
-                .append("192.168.0.1\thost2").append("\n") // single hostname, separated with tabs
+                .append("192.168.0.1\thost2").append("\n") // singlereactor hostname, separated with tabs
                 .append("#comment").append("\n") // comment at the beginning of the line
                 .append(" #comment  ").append("\n") // comment in the middle of the line
                 .append("192.168.0.2  host3  #comment").append("\n") // comment after hostname

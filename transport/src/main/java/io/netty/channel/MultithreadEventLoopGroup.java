@@ -89,6 +89,8 @@ public abstract class MultithreadEventLoopGroup extends MultithreadEventExecutor
         //next方法返回的是一个NioEvenLoop对象，至于children何时被初始化的，
         // 是在MultithreadEventExecutorGroup的构造函数中被初始化的，即 执行EventLoopGroup bossGroup = new NioEventLoopGroup(1);
        // 由于NioEventLoop extends SingleThreadEventLoop，NioEventLoop没有重写该方法，因此看 SingleThreadEventLoop类中的register方法
+
+       //拿下一个单例线程池后，调用他的 register 方法
         return next().register(channel);
     }
 

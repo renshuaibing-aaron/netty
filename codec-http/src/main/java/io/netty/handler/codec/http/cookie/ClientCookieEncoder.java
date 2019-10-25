@@ -34,7 +34,7 @@ import java.util.List;
  * A <a href="http://tools.ietf.org/html/rfc6265">RFC6265</a> compliant cookie encoder to be used client side, so
  * only name=value pairs are sent.
  *
- * Note that multiple cookies are supposed to be sent at once in a single "Cookie" header.
+ * Note that multiple cookies are supposed to be sent at once in a singlereactor "Cookie" header.
  *
  * <pre>
  * // Example
@@ -114,7 +114,7 @@ public final class ClientCookieEncoder extends CookieEncoder {
     };
 
     /**
-     * Encodes the specified cookies into a single Cookie header value.
+     * Encodes the specified cookies into a singlereactor Cookie header value.
      *
      * @param cookies
      *            some cookies
@@ -145,7 +145,7 @@ public final class ClientCookieEncoder extends CookieEncoder {
     }
 
     /**
-     * Encodes the specified cookies into a single Cookie header value.
+     * Encodes the specified cookies into a singlereactor Cookie header value.
      *
      * @param cookies
      *            some cookies
@@ -176,7 +176,7 @@ public final class ClientCookieEncoder extends CookieEncoder {
     }
 
     /**
-     * Encodes the specified cookies into a single Cookie header value.
+     * Encodes the specified cookies into a singlereactor Cookie header value.
      *
      * @param cookies some cookies
      * @return a Rfc6265 style Cookie header value, null if no cookies are passed.

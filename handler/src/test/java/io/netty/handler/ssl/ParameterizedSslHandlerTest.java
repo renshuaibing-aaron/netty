@@ -135,7 +135,7 @@ public class ParameterizedSslHandlerTest {
             // is correctly accounted for on each component.
             final int numComponents = 150;
             // This is the TLS packet size. The goal is to divide the maximum amount of application data that can fit
-            // into a single TLS packet into many components to ensure the overhead is correctly taken into account.
+            // into a singlereactor TLS packet into many components to ensure the overhead is correctly taken into account.
             final int desiredBytes = 16384;
             final int singleComponentSize = desiredBytes / numComponents;
             final int expectedBytes = numComponents * singleComponentSize;

@@ -214,7 +214,7 @@ public class HAProxyMessageDecoder extends ByteToMessageDecoder {
     @Override
     public boolean isSingleDecode() {
         // ByteToMessageDecoder uses this method to optionally break out of the decoding loop after each unit of work.
-        // Since we only ever want to decode a single header we always return true to save a bit of work here.
+        // Since we only ever want to decode a singlereactor header we always return true to save a bit of work here.
         return true;
     }
 

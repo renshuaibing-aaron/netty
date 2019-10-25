@@ -94,7 +94,7 @@ public interface DnsMessage extends ReferenceCounted {
 
     /**
      * Sets the specified {@code section} of this DNS message to the specified {@code record},
-     * making it a single-record section. When the specified {@code section} is {@link DnsSection#QUESTION},
+     * making it a singlereactor-record section. When the specified {@code section} is {@link DnsSection#QUESTION},
      * the specified {@code record} must be a {@link DnsQuestion}.
      */
     DnsMessage setRecord(DnsSection section, DnsRecord record);

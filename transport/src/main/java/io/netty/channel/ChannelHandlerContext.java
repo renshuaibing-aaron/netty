@@ -72,9 +72,9 @@ import java.nio.channels.Channels;
  * <h3>A handler can have more than one context</h3>
  *
  * Please note that a {@link ChannelHandler} instance can be added to more than
- * one {@link ChannelPipeline}.  It means a single {@link ChannelHandler}
+ * one {@link ChannelPipeline}.  It means a singlereactor {@link ChannelHandler}
  * instance can have more than one {@link ChannelHandlerContext} and therefore
- * the single instance can be invoked with different
+ * the singlereactor instance can be invoked with different
  * {@link ChannelHandlerContext}s if it is added to one or more
  * {@link ChannelPipeline}s more than once.
  * <p>

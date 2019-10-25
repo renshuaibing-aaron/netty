@@ -25,7 +25,7 @@ import java.net.InetSocketAddress;
 import java.util.Set;
 
 /**
- * A SCTP/IP  {@link Channel} interface for single SCTP association.
+ * A SCTP/IP  {@link Channel} interface for singlereactor SCTP association.
  *
  * <p>
  * The SctpChannel is a message-oriented, connected transport which supports multi-streaming and multi-homing.

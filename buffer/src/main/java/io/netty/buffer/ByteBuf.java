@@ -178,7 +178,7 @@ import java.nio.charset.UnsupportedCharsetException;
  *
  * <h3>Search operations</h3>
  *
- * For simple single-byte searches, use {@link #indexOf(int, int, byte)} and {@link #bytesBefore(int, int, byte)}.
+ * For simple singlereactor-byte searches, use {@link #indexOf(int, int, byte)} and {@link #bytesBefore(int, int, byte)}.
  * {@link #bytesBefore(byte)} is especially useful when you deal with a {@code NUL}-terminated string.
  * For complicated searches, use {@link #forEachByte(int, int, ByteProcessor)} with a {@link ByteProcessor}
  * implementation.
@@ -2422,7 +2422,7 @@ public abstract class ByteBuf implements ReferenceCounted, Comparable<ByteBuf> {
      * content of this array.  'Identical' here means:
      * <ul>
      * <li>the size of the contents of the two buffers are same and</li>
-     * <li>every single byte of the content of the two buffers are same.</li>
+     * <li>every singlereactor byte of the content of the two buffers are same.</li>
      * </ul>
      * Please note that it does not compare {@link #readerIndex()} nor
      * {@link #writerIndex()}.  This method also returns {@code false} for

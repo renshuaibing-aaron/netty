@@ -281,6 +281,12 @@ public abstract class AbstractBootstrap<B extends AbstractBootstrap<B, C>, C ext
         return doBind(localAddress);
     }
 
+    /**
+     * 1.initAndRegister 初始化 NioServerSocketChannel 通道并注册各个 handler，返回一个 future。
+     * 2.执行 doBind0 方法，完成对端口的绑定。
+     * @param localAddress
+     * @return
+     */
     private ChannelFuture doBind(final SocketAddress localAddress) {
         //初始化并且注册
         //通过initAndRegister()方法得到一个ChannelFuture的实例regFuture
@@ -323,11 +329,22 @@ public abstract class AbstractBootstrap<B extends AbstractBootstrap<B, C>, C ext
     final ChannelFuture initAndRegister() {
         Channel channel = null;
         try {
-            //：这里的channel为一个NioServerSocketChannel对象
-            //这行代码的作用为通过反射产生来一个NioServerSocketChannel类的实例，其中这个NioServerSocketChannel类对象有这样几个属性：SocketChannel、NioServerSocketChannelConfig 、SelectionKey.OP_ACCEPT事件、NioMessageUnsafe、DefaultChannelPipeline
-            //————————————————
+            //1.这里的channel为一个NioServerSocketChannel对象
+            //这行代码的作用为通过反射产生来一个NioServerSocketChannel类的实例，
+            // 其中这个NioServerSocketChannel类对象有这样几个属性：
+            // SocketChannel、NioServerSocketChannelConfig 、SelectionKey.OP_ACCEPT事件、NioMessageUnsafe、DefaultChannelPipeline
+
+            /**
+             * 1.通过 NIO 的SelectorProvider 的 openServerSocketChannel
+             * 方法得到JDK 的 channel。目的是让 Netty 包装 JDK 的 channel。同时设置刚兴趣的事件为 ACCEPT和非阻塞
+             * 2.创建了一个唯一的 ChannelId，创建了一个 NioMessageUnsafe，
+             * 用于操作消息，创建了一个 DefaultChannelPipeline 管道，是个双向链表结构，用于过滤所有的进出的消息。
+             * 3.创建了一个 NioServerSocketChannelConfig 对象，用于对外展示一些配置。
+             */
             channel = channelFactory.newChannel();
-            //init只是初始化了一些基本的配置和属性，以及在pipeline上加入了一个接入器，用来专门接受新连接，并没有启动服务.
+
+            //2.init只是初始化了一些基本的配置和属性，以及在pipeline上加入了一个接入器，用来专门接受新连接，并没有启动服务.
+            //由 ServerBootstrap 自己实现
             init(channel);
         } catch (Throwable t) {
             if (channel != null) {
@@ -339,6 +356,7 @@ public abstract class AbstractBootstrap<B extends AbstractBootstrap<B, C>, C ext
         }
 
         //channel的初始化和注册  MultithreadEventLoopGroup
+
         ChannelFuture regFuture = config().group().register(channel);
         if (regFuture.cause() != null) {
             if (channel.isRegistered()) {

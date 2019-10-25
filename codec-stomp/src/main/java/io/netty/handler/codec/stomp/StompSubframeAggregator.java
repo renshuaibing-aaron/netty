@@ -23,7 +23,7 @@ import io.netty.handler.codec.TooLongFrameException;
 
 /**
  * A {@link ChannelHandler} that aggregates an {@link StompHeadersSubframe}
- * and its following {@link StompContentSubframe}s into a single {@link StompFrame}.
+ * and its following {@link StompContentSubframe}s into a singlereactor {@link StompFrame}.
  * It is useful when you don't want to take care of STOMP frames whose content is 'chunked'.  Insert this
  * handler after {@link StompSubframeDecoder} in the {@link ChannelPipeline}:
  */

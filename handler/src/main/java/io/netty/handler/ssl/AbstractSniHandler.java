@@ -36,7 +36,7 @@ import java.util.Locale;
 /**
  * <p>Enables <a href="https://tools.ietf.org/html/rfc3546#section-3.1">SNI
  * (Server Name Indication)</a> extension for server side SSL. For clients
- * support SNI, the server could have multiple host name bound on a single IP.
+ * support SNI, the server could have multiple host name bound on a singlereactor IP.
  * The client will send host name in the handshake data so server could decide
  * which certificate to choose for the host name.</p>
  */

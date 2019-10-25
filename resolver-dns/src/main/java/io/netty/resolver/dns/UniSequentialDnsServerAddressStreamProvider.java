@@ -18,7 +18,7 @@ package io.netty.resolver.dns;
 import io.netty.util.internal.ObjectUtil;
 
 /**
- * A {@link DnsServerAddressStreamProvider} which is backed by a single {@link DnsServerAddresses}.
+ * A {@link DnsServerAddressStreamProvider} which is backed by a singlereactor {@link DnsServerAddresses}.
  */
 abstract class UniSequentialDnsServerAddressStreamProvider implements DnsServerAddressStreamProvider {
     private final DnsServerAddresses addresses;

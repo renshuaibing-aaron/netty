@@ -210,11 +210,17 @@ public class DefaultChannelPipeline implements ChannelPipeline {
         final AbstractChannelHandlerContext newCtx;
         synchronized (this) {
             ////检查是否有重复的名字
+            //检查该 handler 是否符合标准，如果没有 Sharable 注解且已经被使用过了，就抛出异常。
             checkMultiplicity(handler);
 
             //Pipeline中是以AbstractChannelHandlerContext为节点的双向链表。
+            //创建一个 AbstractChannelHandlerContext 对象，这里说一下，
+            // ChannelHandlerContext 对象是 ChannelHandler 和 ChannelPipeline 之间的关联，
+            // 每当有 ChannelHandler 添加到 Pipeline 中时，
+            // 都会创建 Context。Context 的主要功能是管理他所关联的 Handler 和同一个 Pipeline 中的其他 Handler 之间的交互。
             newCtx = newContext(group, filterName(name, handler), handler);
 
+            //然后将 Context 添加到链表中。也就是追加到 tail 节点的前面。
             addLast0(newCtx);
 
             // If the registered is false it means that the channel was not registered on an eventloop yet.

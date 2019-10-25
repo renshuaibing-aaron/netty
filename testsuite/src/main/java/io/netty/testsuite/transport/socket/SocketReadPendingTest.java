@@ -130,7 +130,7 @@ public class SocketReadPendingTest extends AbstractSocketTest {
     }
 
     /**
-     * Designed to read a single byte at a time to control the number of reads done at a fine granularity.
+     * Designed to read a singlereactor byte at a time to control the number of reads done at a fine granularity.
      */
     private static final class TestNumReadsRecvByteBufAllocator implements RecvByteBufAllocator {
         private final int numReads;

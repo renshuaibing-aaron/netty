@@ -44,6 +44,7 @@ public abstract class AbstractNioMessageChannel extends AbstractNioChannel {
 
     @Override
     protected AbstractNioUnsafe newUnsafe() {
+        //NIO 的 message 的操作类，是 Netty 的核心组件
         return new NioMessageUnsafe();
     }
 

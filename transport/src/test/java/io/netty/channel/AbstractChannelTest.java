@@ -29,7 +29,7 @@ public class AbstractChannelTest {
     @Test
     public void ensureInitialRegistrationFiresActive() throws Throwable {
         EventLoop eventLoop = mock(EventLoop.class);
-        // This allows us to have a single-threaded test
+        // This allows us to have a singlereactor-threaded test
         when(eventLoop.inEventLoop()).thenReturn(true);
 
         TestChannel channel = new TestChannel();
@@ -46,7 +46,7 @@ public class AbstractChannelTest {
     @Test
     public void ensureSubsequentRegistrationDoesNotFireActive() throws Throwable {
         final EventLoop eventLoop = mock(EventLoop.class);
-        // This allows us to have a single-threaded test
+        // This allows us to have a singlereactor-threaded test
         when(eventLoop.inEventLoop()).thenReturn(true);
 
         doAnswer(new Answer() {

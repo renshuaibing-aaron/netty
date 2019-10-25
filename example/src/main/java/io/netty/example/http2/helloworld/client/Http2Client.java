@@ -50,7 +50,7 @@ import static io.netty.handler.codec.http.HttpVersion.HTTP_1_1;
 
 /**
  * An HTTP2 client that allows you to send HTTP2 frames to a server. Inbound and outbound frames are
- * logged. When run from the command-line, sends a single HEADERS frame to the server and gets back
+ * logged. When run from the command-line, sends a singlereactor HEADERS frame to the server and gets back
  * a "Hello World" response.
  */
 public final class Http2Client {

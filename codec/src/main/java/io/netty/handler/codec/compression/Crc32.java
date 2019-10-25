@@ -102,7 +102,7 @@ final class Crc32 {
     }
 
     /**
-     * Update the CRC with a single byte.
+     * Update the CRC with a singlereactor byte.
      * @param value The value to update the CRC with
      */
     public void updateCRC(final int value) {

@@ -42,7 +42,7 @@ import static org.junit.Assert.assertTrue;
 public class HttpResponseDecoderTest {
 
     /**
-     * The size of headers should be calculated correctly even if a single header is split into multiple fragments.
+     * The size of headers should be calculated correctly even if a singlereactor header is split into multiple fragments.
      * @see <a href="https://github.com/netty/netty/issues/3445">#3445</a>
      */
     @Test

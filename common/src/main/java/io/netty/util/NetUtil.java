@@ -527,7 +527,7 @@ public final class NetUtil {
             case '.':
                 // case for the last 32-bits represented as IPv4 x:x:x:x:x:x:d.d.d.d
 
-                // check a normal case (6 single colons)
+                // check a normal case (6 singlereactor colons)
                 if (compressBegin < 0 && colons != 6 ||
                     // a special case ::1:2:3:4:5:d.d.d.d allows 7 colons with an
                     // IPv4 ending, otherwise 7 :'s is bad

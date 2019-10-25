@@ -897,7 +897,7 @@ public abstract class SslContext {
      * <p>
      * The underlying {@link SSLEngine} may not follow the restrictions imposed by the
      * <a href="https://docs.oracle.com/javase/7/docs/api/javax/net/ssl/SSLEngine.html">SSLEngine javadocs</a> which
-     * limits wrap/unwrap to operate on a single SSL/TLS packet.
+     * limits wrap/unwrap to operate on a singlereactor SSL/TLS packet.
      * @param alloc If supported by the SSLEngine then the SSLEngine will use this to allocate ByteBuf objects.
      * @return a new {@link SslHandler}
      */
@@ -932,7 +932,7 @@ public abstract class SslContext {
      * <p>
      * The underlying {@link SSLEngine} may not follow the restrictions imposed by the
      * <a href="https://docs.oracle.com/javase/7/docs/api/javax/net/ssl/SSLEngine.html">SSLEngine javadocs</a> which
-     * limits wrap/unwrap to operate on a single SSL/TLS packet.
+     * limits wrap/unwrap to operate on a singlereactor SSL/TLS packet.
      * @param alloc If supported by the SSLEngine then the SSLEngine will use this to allocate ByteBuf objects.
      * @param peerHost the non-authoritative name of the host
      * @param peerPort the non-authoritative port

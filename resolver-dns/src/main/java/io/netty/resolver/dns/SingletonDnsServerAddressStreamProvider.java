@@ -20,7 +20,7 @@ import io.netty.util.internal.UnstableApi;
 import java.net.InetSocketAddress;
 
 /**
- * A {@link DnsServerAddressStreamProvider} which always uses a single DNS server for resolution.
+ * A {@link DnsServerAddressStreamProvider} which always uses a singlereactor DNS server for resolution.
  */
 @UnstableApi
 public final class SingletonDnsServerAddressStreamProvider extends UniSequentialDnsServerAddressStreamProvider {

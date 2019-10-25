@@ -66,6 +66,7 @@ public abstract class MultithreadEventExecutorGroup extends AbstractEventExecuto
      * @param chooserFactory    the {@link EventExecutorChooserFactory} to use.
      * @param args              arguments which will passed to each {@link #newChild(Executor, Object...)} call
      */
+
     protected MultithreadEventExecutorGroup(int nThreads, Executor executor,
                                             EventExecutorChooserFactory chooserFactory, Object... args) {
         if (nThreads <= 0) {
@@ -76,11 +77,15 @@ public abstract class MultithreadEventExecutorGroup extends AbstractEventExecuto
         if (executor == null) {
             //线程创建器  子类MultithreadEventLoopGroup里面的方法
             ThreadFactory threadFactory = newDefaultThreadFactory();
+            // 该线程池没有任何队列，提交任务后，创建任何线程类型都是 FastThreadLocalRunnable, 并且立即start。
             executor = new ThreadPerTaskExecutor(threadFactory);
         }
 
+        // 创建一个事件执行组(创建一个线程池（单例线程池）数组)
         children = new EventExecutor[nThreads];
+
         //产生nTreads个NioEventLoop对象保存在children数组中
+        // 初始化线程数组
         for (int i = 0; i < nThreads; i ++) {
             boolean success = false;
             try {
@@ -112,6 +117,7 @@ public abstract class MultithreadEventExecutorGroup extends AbstractEventExecuto
             }
         }
         System.out.println("======创建线程选择器=================");
+        //据线程选择工厂创建一个 线程选择器，默认是对2取余（位运算），也可以顺序获取
         chooser = chooserFactory.newChooser(children);
 
         final FutureListener<Object> terminationListener = future -> {
@@ -121,9 +127,11 @@ public abstract class MultithreadEventExecutorGroup extends AbstractEventExecuto
         };
 
         for (EventExecutor e: children) {
+            //为每一个单例线程池添加一个关闭监听器
             e.terminationFuture().addListener(terminationListener);
         }
 
+        //将所有的单例线程池添加到一个 HashSet 中
         Set<EventExecutor> childrenSet = new LinkedHashSet<EventExecutor>(children.length);
         Collections.addAll(childrenSet, children);
         readonlyChildren = Collections.unmodifiableSet(childrenSet);

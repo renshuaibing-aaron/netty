@@ -24,7 +24,7 @@ import io.netty.handler.codec.http.cookie.ClientCookieDecoder;
  * User-Agents are not supposed to interpret cookies, so, if present, {@link Cookie#rawValue()} will be used.
  * Otherwise, {@link Cookie#value()} will be used unquoted.
  *
- * Note that multiple cookies are supposed to be sent at once in a single "Cookie" header.
+ * Note that multiple cookies are supposed to be sent at once in a singlereactor "Cookie" header.
  *
  * <pre>
  * // Example
@@ -61,7 +61,7 @@ public final class ClientCookieEncoder {
     }
 
     /**
-     * Encodes the specified cookies into a single Cookie header value.
+     * Encodes the specified cookies into a singlereactor Cookie header value.
      *
      * @param cookies some cookies
      * @return a Rfc6265 style Cookie header value, null if no cookies are passed.
@@ -72,7 +72,7 @@ public final class ClientCookieEncoder {
     }
 
     /**
-     * Encodes the specified cookies into a single Cookie header value.
+     * Encodes the specified cookies into a singlereactor Cookie header value.
      *
      * @param cookies some cookies
      * @return a Rfc6265 style Cookie header value, null if no cookies are passed.

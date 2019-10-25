@@ -63,7 +63,7 @@ import java.util.List;
  * If the content of an HTTP message is greater than {@code maxChunkSize} or
  * the transfer encoding of the HTTP message is 'chunked', this decoder
  * generates one {@link HttpMessage} instance and its following
- * {@link HttpContent}s per single HTTP message to avoid excessive memory
+ * {@link HttpContent}s per singlereactor HTTP message to avoid excessive memory
  * consumption. For example, the following HTTP message:
  * <pre>
  * GET / HTTP/1.1

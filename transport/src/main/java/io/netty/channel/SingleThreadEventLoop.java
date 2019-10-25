@@ -27,7 +27,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.ThreadFactory;
 
 /**
- * Abstract base class for {@link EventLoop}s that execute all its submitted tasks in a single thread.
+ * Abstract base class for {@link EventLoop}s that execute all its submitted tasks in a singlereactor thread.
  *
  */
 public abstract class SingleThreadEventLoop extends SingleThreadEventExecutor implements EventLoop {
@@ -71,6 +71,10 @@ public abstract class SingleThreadEventLoop extends SingleThreadEventExecutor im
 
     @Override
     public ChannelFuture register(Channel channel) {
+        //下一个单例线程池后，调用他的 register 方法
+        //this 就是 EventLoop（单例线程池），这里多次提到单例线程池，为什么使用单例线程池呢？
+        // 一个线程还使用线程池有什么意义呢？答：需要任务队列，有很多任务需要进行调度，所以需要线程池的特性。
+        // 但为了多线程的切换导致的性能损耗和为了消除同步，所以使用单个线程。
         return register(new DefaultChannelPromise(channel, this));
     }
 

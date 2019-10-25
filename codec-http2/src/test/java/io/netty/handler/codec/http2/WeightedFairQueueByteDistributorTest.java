@@ -674,7 +674,7 @@ public class WeightedFairQueueByteDistributorTest extends AbstractWeightedFairQu
 
     /**
      * In this test, we call distribute with 100 bytes which is the total amount eligible to be written, and also have
-     * streams with 0 bytes to write. All of these streams should be written with a single call to distribute.
+     * streams with 0 bytes to write. All of these streams should be written with a singlereactor call to distribute.
      *
      * <pre>
      *         0

@@ -33,7 +33,7 @@ import io.netty.handler.stream.ChunkedWriteHandler;
  *
  * Below are some of configuration discussed in this example:
  * <h3>Support only a specific origin</h3>
- * To support a single origin instead of the wildcard use the following:
+ * To support a singlereactor origin instead of the wildcard use the following:
  * <pre>
  * CorsConfig corsConfig = CorsConfig.withOrigin("http://domain1.com")
  * </pre>

@@ -148,7 +148,7 @@ public class IsValidIpV6Benchmark extends AbstractMicrobenchmark {
 
             case ':':
                 // FIX "IP6 mechanism syntax #ip6-bad1"
-                // An IPV6 address cannot start with a single ":".
+                // An IPV6 address cannot start with a singlereactor ":".
                 // Either it can start with "::" or with a number.
                 if (i == startOffset && (endOffset <= i || ipAddress.charAt(i + 1) != ':')) {
                     return false;

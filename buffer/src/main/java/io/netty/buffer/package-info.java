@@ -63,7 +63,7 @@
  * buffer and copy the two parts into the new buffer.   Alternatively, you can
  * perform a gathering write operation in NIO, but it restricts you to represent
  * the composite of buffers as an array of {@link java.nio.ByteBuffer}s rather
- * than a single buffer, breaking the abstraction and introducing complicated
+ * than a singlereactor buffer, breaking the abstraction and introducing complicated
  * state management.  Moreover, it's of no use if you are not going to read or
  * write from an NIO channel.
  * <pre>
@@ -82,7 +82,7 @@
  * {@link io.netty.buffer.ByteBuf} messageWithFooter = {@link io.netty.buffer.Unpooled}.wrappedBuffer(message, footer);
  *
  * // Because the composite is still a {@link io.netty.buffer.ByteBuf}, you can access its content
- * // easily, and the accessor method will behave just like it's a single buffer
+ * // easily, and the accessor method will behave just like it's a singlereactor buffer
  * // even if the region you want to access spans over multiple components.  The
  * // unsigned integer being read here is located across body and footer.
  * messageWithFooter.getUnsignedInt(

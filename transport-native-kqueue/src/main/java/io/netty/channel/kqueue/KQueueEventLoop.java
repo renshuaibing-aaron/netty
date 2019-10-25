@@ -304,7 +304,7 @@ final class KQueueEventLoop extends SingleThreadEventLoop {
     @Override
     public int pendingTasks() {
         // As we use a MpscQueue we need to ensure pendingTasks() is only executed from within the EventLoop as
-        // otherwise we may see unexpected behavior (as size() is only allowed to be called by a single consumer).
+        // otherwise we may see unexpected behavior (as size() is only allowed to be called by a singlereactor consumer).
         // See https://github.com/netty/netty/issues/5297
         return inEventLoop() ? super.pendingTasks() : submit(pendingTasksCallable).syncUninterruptibly().getNow();
     }

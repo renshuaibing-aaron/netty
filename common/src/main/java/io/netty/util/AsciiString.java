@@ -34,7 +34,7 @@ import static io.netty.util.internal.MathUtil.isOutOfBounds;
 import static io.netty.util.internal.ObjectUtil.checkNotNull;
 
 /**
- * A string which has been encoded into a character encoding whose character always takes a single byte, similarly to
+ * A string which has been encoded into a character encoding whose character always takes a singlereactor byte, similarly to
  * ASCII. It internally keeps its content in a byte array unlike {@link String}, which uses a character array, for
  * reduced memory footprint and faster data transfer from/to byte-based data structures such as a byte array and
  * {@link ByteBuffer}. It is often used in conjunction with {@code Headers} that require a {@link CharSequence}.

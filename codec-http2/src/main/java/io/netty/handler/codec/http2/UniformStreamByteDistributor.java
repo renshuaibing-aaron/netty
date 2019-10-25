@@ -137,7 +137,7 @@ public final class UniformStreamByteDistributor implements StreamByteDistributor
     }
 
     /**
-     * The remote flow control state for a single stream.
+     * The remote flow control state for a singlereactor stream.
      */
     private final class State {
         final Http2Stream stream;

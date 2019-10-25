@@ -278,7 +278,7 @@ public class DefaultHttp2FrameWriter implements Http2FrameWriter, Http2FrameSize
             ByteBuf buf = ctx.alloc().buffer(PRIORITY_FRAME_LENGTH);
             writeFrameHeaderInternal(buf, PRIORITY_ENTRY_LENGTH, PRIORITY, new Http2Flags(), streamId);
             buf.writeInt(exclusive ? (int) (0x80000000L | streamDependency) : streamDependency);
-            // Adjust the weight so that it fits into a single byte on the wire.
+            // Adjust the weight so that it fits into a singlereactor byte on the wire.
             buf.writeByte(weight - 1);
             return ctx.write(buf, promise);
         } catch (Throwable t) {
@@ -539,7 +539,7 @@ public class DefaultHttp2FrameWriter implements Http2FrameWriter, Http2FrameSize
             if (hasPriority) {
                 buf.writeInt(exclusive ? (int) (0x80000000L | streamDependency) : streamDependency);
 
-                // Adjust the weight so that it fits into a single byte on the wire.
+                // Adjust the weight so that it fits into a singlereactor byte on the wire.
                 buf.writeByte(weight - 1);
             }
             ctx.write(buf, promiseAggregator.newPromise());

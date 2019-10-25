@@ -97,7 +97,7 @@ public class WebSocketHandshakeHandOverTest {
 
     /**
      * Transfers all pending data from the source channel into the destination channel.<br>
-     * Merges all data into a single buffer before transmission into the destination.
+     * Merges all data into a singlereactor buffer before transmission into the destination.
      * @param srcChannel The source channel
      * @param dstChannel The destination channel
      */

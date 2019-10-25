@@ -26,7 +26,7 @@ import io.netty.util.NetUtil;
 import java.util.List;
 
 /**
- * Decodes a single {@link Socks4CommandResponse} from the inbound {@link ByteBuf}s.
+ * Decodes a singlereactor {@link Socks4CommandResponse} from the inbound {@link ByteBuf}s.
  * On successful decode, this decoder will forward the received data to the next handler, so that
  * other handler can remove this decoder later.  On failed decode, this decoder will discard the
  * received data, so that other handler closes the connection later.

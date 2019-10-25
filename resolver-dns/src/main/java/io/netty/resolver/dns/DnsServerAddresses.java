@@ -148,7 +148,7 @@ public abstract class DnsServerAddresses {
     }
 
     /**
-     * Returns the {@link DnsServerAddresses} that yields only a single {@code address}.
+     * Returns the {@link DnsServerAddresses} that yields only a singlereactor {@code address}.
      */
     public static DnsServerAddresses singleton(final InetSocketAddress address) {
         if (address == null) {
