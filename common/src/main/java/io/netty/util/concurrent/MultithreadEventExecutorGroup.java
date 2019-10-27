@@ -82,6 +82,7 @@ public abstract class MultithreadEventExecutorGroup extends AbstractEventExecuto
         }
 
         // 创建一个事件执行组(创建一个线程池（单例线程池）数组)
+        //SingleThreadEventExecutor
         children = new EventExecutor[nThreads];
 
         //产生nTreads个NioEventLoop对象保存在children数组中
@@ -89,7 +90,7 @@ public abstract class MultithreadEventExecutorGroup extends AbstractEventExecuto
         for (int i = 0; i < nThreads; i ++) {
             boolean success = false;
             try {
-                //怎么实现 NioEventLoopGroup
+                //在NioEventLoopGroup
                 children[i] = newChild(executor, args);
                 success = true;
             } catch (Exception e) {
@@ -118,6 +119,7 @@ public abstract class MultithreadEventExecutorGroup extends AbstractEventExecuto
         }
         System.out.println("======创建线程选择器=================");
         //据线程选择工厂创建一个 线程选择器，默认是对2取余（位运算），也可以顺序获取
+        //根据线程个数是否为2的幂次方，采用不同策略初始化chooser
         chooser = chooserFactory.newChooser(children);
 
         final FutureListener<Object> terminationListener = future -> {
@@ -146,6 +148,7 @@ public abstract class MultithreadEventExecutorGroup extends AbstractEventExecuto
     @Override
     public EventExecutor next() {
         ////调用MultithreadEventExecutorGroup中的next方法
+        //本质是找到一个nioeventloop  每次连接新到时 netty 会选择一个nioeventloop
         return chooser.next();
     }
 

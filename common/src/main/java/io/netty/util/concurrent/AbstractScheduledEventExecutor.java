@@ -33,6 +33,7 @@ public abstract class AbstractScheduledEventExecutor extends AbstractEventExecut
 
     private static final Comparator<ScheduledFutureTask<?>> SCHEDULED_FUTURE_TASK_COMPARATOR = ScheduledFutureTask::compareTo;
 
+    //定时任务队列  普通队列实现，非线程安全
     PriorityQueue<ScheduledFutureTask<?>> scheduledTaskQueue;
 
     protected AbstractScheduledEventExecutor() {
@@ -150,6 +151,15 @@ public abstract class AbstractScheduledEventExecutor extends AbstractEventExecut
                 this, command, null, ScheduledFutureTask.deadlineNanos(unit.toNanos(delay))));
     }
 
+    /**
+     * 执行定时任务
+     * 什么时间会用得到？
+     * @param callable
+     * @param delay
+     * @param unit
+     * @param <V>
+     * @return
+     */
     @Override
     public <V> ScheduledFuture<V> schedule(Callable<V> callable, long delay, TimeUnit unit) {
         ObjectUtil.checkNotNull(callable, "callable");
@@ -157,6 +167,7 @@ public abstract class AbstractScheduledEventExecutor extends AbstractEventExecut
         if (delay < 0) {
             delay = 0;
         }
+        //把定时任务封装成一个task
         return schedule(new ScheduledFutureTask<V>(
                 this, callable, ScheduledFutureTask.deadlineNanos(unit.toNanos(delay))));
     }
@@ -198,6 +209,8 @@ public abstract class AbstractScheduledEventExecutor extends AbstractEventExecut
     }
 
     <V> ScheduledFuture<V> schedule(final ScheduledFutureTask<V> task) {
+
+        //由于定时任务队列是非线程安全的，所以在外部线程操作定时任务时，往队列里面添加任务当做一个普通任务 进行，因为普通任务的是线程安全的
         if (inEventLoop()) {
             System.out.println("======scheduledTaskQueue().add(task);================");
             scheduledTaskQueue().add(task);

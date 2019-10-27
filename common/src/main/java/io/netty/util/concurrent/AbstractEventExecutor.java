@@ -160,9 +160,11 @@ public abstract class AbstractEventExecutor extends AbstractExecutorService impl
      */
     protected static void safeExecute(Runnable task) {
         try {
-            System.out.println("========task.safeExecute===================");
+            System.out.println("========执行任务===================");
+            //执行任务很简单，直接执行runnable的run方法 （转变思维，深入理解线程）
             task.run();
         } catch (Throwable t) {
+            //并且异常只是简单打印
             logger.warn("A task raised an exception. Task: {}", task, t);
         }
     }
