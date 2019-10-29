@@ -56,6 +56,7 @@ public abstract class SingleThreadEventLoop extends SingleThreadEventExecutor im
                                     boolean addTaskWakesUp, int maxPendingTasks,
                                     RejectedExecutionHandler rejectedExecutionHandler) {
         super(parent, executor, addTaskWakesUp, maxPendingTasks, rejectedExecutionHandler);
+        //创建队列
         tailTasks = newTaskQueue(maxPendingTasks);
     }
 
@@ -83,6 +84,7 @@ public abstract class SingleThreadEventLoop extends SingleThreadEventExecutor im
         ObjectUtil.checkNotNull(promise, "promise");
         //NioServerSocketChannel实例化中设置来unsafe属性
         //channel.unsafe().register(this, promise)这行代码调用的是AbstractUnsafe类中的register方法
+        //
         promise.channel().unsafe().register(this, promise);
         return promise;
     }

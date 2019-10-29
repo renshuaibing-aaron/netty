@@ -52,6 +52,7 @@ public abstract class AbstractNioByteChannel extends AbstractNioChannel {
      * @param ch                the underlying {@link SelectableChannel} on which it operates
      */
     protected AbstractNioByteChannel(Channel parent, SelectableChannel ch) {
+        //客户端事件 关心的是数据的读写
         super(parent, ch, SelectionKey.OP_READ);
     }
 
@@ -74,6 +75,7 @@ public abstract class AbstractNioByteChannel extends AbstractNioChannel {
         return METADATA;
     }
 
+    //客户端用的unsafe
     protected class NioByteUnsafe extends AbstractNioUnsafe {
 
         private void closeOnRead(ChannelPipeline pipeline) {
@@ -109,7 +111,7 @@ public abstract class AbstractNioByteChannel extends AbstractNioChannel {
 
         @Override
         public final void read() {
-            System.out.println("========普通读事件？===========");
+            //这里是读取数据（注意和服务端的区别）
             final ChannelConfig config = config();
             final ChannelPipeline pipeline = pipeline();
             final ByteBufAllocator allocator = config.getAllocator();

@@ -66,6 +66,7 @@ public abstract class ChannelInitializer<C extends Channel> extends ChannelInbou
      *                      {@link #exceptionCaught(ChannelHandlerContext, Throwable)} which will by default close
      *                      the {@link Channel}.
      */
+    //这里是用户自定义的方法,在服务端初始化时 配置
     protected abstract void initChannel(C ch) throws Exception;
 
     @Override
@@ -110,13 +111,14 @@ public abstract class ChannelInitializer<C extends Channel> extends ChannelInbou
     private boolean initChannel(ChannelHandlerContext ctx) throws Exception {
         if (initMap.putIfAbsent(ctx, Boolean.TRUE) == null) { // Guard against re-entrance.
             try {
-
+                //实现用户自定义的方法？
                 initChannel((C) ctx.channel());
             } catch (Throwable cause) {
                 // Explicitly call exceptionCaught(...) as we removed the handler before calling initChannel(...).
                 // We do so to prevent multiple calls to initChannel(...).
                 exceptionCaught(ctx, cause);
             } finally {
+                //为什么要删除
                 remove(ctx);
             }
             return true;

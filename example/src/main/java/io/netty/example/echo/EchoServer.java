@@ -42,13 +42,15 @@ public final class EchoServer {
     public static void singleReactor() throws Exception {
 
             // Configure the server.
-            EventLoopGroup eventLoopGroup = new NioEventLoopGroup();
+            EventLoopGroup eventLoopGroup = new NioEventLoopGroup(1);
 
             EventLoop bossLoop = eventLoopGroup.next();
             EventLoop workLoop = bossLoop;
             ServerBootstrap b = new ServerBootstrap();
 
-            b.group(bossLoop, workLoop)
+        EchoServerIniterHandler echoServerIniterHandler = new EchoServerIniterHandler();
+
+        b.group(bossLoop, workLoop)
                     //NioServerSocketChannel class 对象。会根据这个 class 创建 channel 对象
                     .channel(NioServerSocketChannel.class)
 
@@ -59,14 +61,9 @@ public final class EchoServer {
                     .handler(new LoggingHandler(LogLevel.INFO))
 
                     //childHandler 传入一个 hanlder ，这个handler 将会在每个客户端连接的时候调用。供 SocketChannel 使用。
-                    .childHandler(new ChannelInitializer<SocketChannel>() {
-                        @Override
-                        public void initChannel(SocketChannel ch) throws Exception {
-                            ChannelPipeline p = ch.pipeline();
-                            //p.addLast(new LoggingHandler(LogLevel.INFO));
-                            p.addLast(new EchoServerHandler());
-                        }
-                    });
+
+                    //修改
+                    .childHandler(echoServerIniterHandler);
 
             // Start the server.
             ChannelFuture f = b.bind(PORT).sync();
@@ -75,6 +72,7 @@ public final class EchoServer {
             f.channel().closeFuture().sync();
 
     }
+
 
 
     public void threadPoolReactor() throws Exception {

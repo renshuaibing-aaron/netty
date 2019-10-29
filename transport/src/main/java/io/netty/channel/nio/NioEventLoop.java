@@ -141,6 +141,7 @@ public final class NioEventLoop extends SingleThreadEventLoop {
     NioEventLoop(NioEventLoopGroup parent, Executor executor, SelectorProvider selectorProvider,
                  SelectStrategy strategy, RejectedExecutionHandler rejectedExecutionHandler) {
         super(parent, executor, false, DEFAULT_MAX_PENDING_TASKS, rejectedExecutionHandler);
+
         if (selectorProvider == null) {
             throw new NullPointerException("selectorProvider");
         }
@@ -677,6 +678,7 @@ public final class NioEventLoop extends SingleThreadEventLoop {
             // to a spin loop
             //处理连接事件
             if ((readyOps & (SelectionKey.OP_READ | SelectionKey.OP_ACCEPT)) != 0 || readyOps == 0) {
+                //NioMessageUnsafe
                 unsafe.read();
             }
         } catch (CancelledKeyException ignored) {

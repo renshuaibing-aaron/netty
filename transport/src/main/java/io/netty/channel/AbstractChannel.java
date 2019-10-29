@@ -55,9 +55,12 @@ public abstract class AbstractChannel extends DefaultAttributeMap implements Cha
     private static final NotYetConnectedException FLUSH0_NOT_YET_CONNECTED_EXCEPTION = ThrowableUtil.unknownStackTrace(
             new NotYetConnectedException(), AbstractUnsafe.class, "flush0()");
 
+    //服务端和客户端channel的 相关
     private final Channel parent;
     private final ChannelId id;
     private final Unsafe unsafe;
+
+    //每个都有一个pipeline
     private final DefaultChannelPipeline pipeline;
     private final VoidChannelPromise unsafeVoidPromise = new VoidChannelPromise(this, false);
     private final CloseFuture closeFuture = new CloseFuture(this);
@@ -79,10 +82,14 @@ public abstract class AbstractChannel extends DefaultAttributeMap implements Cha
      *        the parent of this channel. {@code null} if there's no parent.
      */
     protected AbstractChannel(Channel parent) {
+
+        //服务端channel
         this.parent = parent;
         id = newId();
         //设置unsafe属性主要作用为：用来负责底层的connect、register、read和write等操作。
-        //AbstractNioMessageChannel 方法
+        //客户端和服务端不同
+        //服务端是NioMessageUnsafe
+        //客户端是NioByteUnsafe
         unsafe = newUnsafe();
         //设置pipeline属性
         pipeline = newChannelPipeline();

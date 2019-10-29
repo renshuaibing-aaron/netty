@@ -45,6 +45,8 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * Abstract base class for {@link Channel} implementations which use a Selector based approach.
+ *
+ * Selector 事件监听
  */
 public abstract class AbstractNioChannel extends AbstractChannel {
 
@@ -54,8 +56,11 @@ public abstract class AbstractNioChannel extends AbstractChannel {
     private static final ClosedChannelException DO_CLOSE_CLOSED_CHANNEL_EXCEPTION = ThrowableUtil.unknownStackTrace(
             new ClosedChannelException(), AbstractNioChannel.class, "doClose()");
 
+    //JDK channel
     private final SelectableChannel ch;
     protected final int readInterestOp;
+
+    //感兴趣事件
     volatile SelectionKey selectionKey;
     boolean readPending;
     private final Runnable clearReadPendingRunnable = new Runnable() {
@@ -82,7 +87,9 @@ public abstract class AbstractNioChannel extends AbstractChannel {
      */
     protected AbstractNioChannel(Channel parent, SelectableChannel ch, int readInterestOp) {
         super(parent);
+        //JDK
         this.ch = ch;
+        //读事件
         this.readInterestOp = readInterestOp;
         try {
             //设置当前的ServerSocketChannel为非阻塞的

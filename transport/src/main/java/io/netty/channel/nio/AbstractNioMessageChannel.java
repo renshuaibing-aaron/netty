@@ -39,6 +39,7 @@ public abstract class AbstractNioMessageChannel extends AbstractNioChannel {
      * @see AbstractNioChannel#AbstractNioChannel(Channel, SelectableChannel, int)
      */
     protected AbstractNioMessageChannel(Channel parent, SelectableChannel ch, int readInterestOp) {
+        //
         super(parent, ch, readInterestOp);
     }
 
@@ -64,14 +65,19 @@ public abstract class AbstractNioMessageChannel extends AbstractNioChannel {
      */
     private final class NioMessageUnsafe extends AbstractNioUnsafe {
 
+        //临时存放获取的连接？
         private final List<Object> readBuf = new ArrayList<Object>();
 
         @Override
         public void read() {
-            System.out.println("=======accept事件？==========");
+            System.out.println("=======这里获取一个连接==========");
+            //这里的读是读取一个连接
+            //首先判断是nio 内部线程进行
             assert eventLoop().inEventLoop();
             final ChannelConfig config = config();
             final ChannelPipeline pipeline = pipeline();
+
+            //利用这个handler 控制连接的速率 每次获取16个连接
             final RecvByteBufAllocator.Handle allocHandle = unsafe().recvBufAllocHandle();
             allocHandle.reset(config);
 
@@ -79,8 +85,11 @@ public abstract class AbstractNioMessageChannel extends AbstractNioChannel {
             Throwable exception = null;
             try {
                 try {
+                    //循环
                     do {
                         System.out.println("======");
+                        //这里拿到jdk的channel
+                        //NioServerSocketChannel 里面执行
                         int localRead = doReadMessages(readBuf);
                         if (localRead == 0) {
                             break;
@@ -91,6 +100,7 @@ public abstract class AbstractNioMessageChannel extends AbstractNioChannel {
                         }
 
                         allocHandle.incMessagesRead(localRead);
+
                     } while (allocHandle.continueReading());
                 } catch (Throwable t) {
                     exception = t;

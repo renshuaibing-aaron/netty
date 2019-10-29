@@ -50,6 +50,7 @@ public abstract class ChannelHandlerAdapter implements ChannelHandler {
          *
          * See <a href="https://github.com/netty/netty/issues/2289">#2289</a>.
          */
+        //根据注解 进行判断
         Class<?> clazz = getClass();
         Map<Class<?>, Boolean> cache = InternalThreadLocalMap.get().handlerSharableCache();
         Boolean sharable = cache.get(clazz);

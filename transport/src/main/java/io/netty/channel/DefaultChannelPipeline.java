@@ -98,8 +98,8 @@ public class DefaultChannelPipeline implements ChannelPipeline {
         voidPromise =  new VoidChannelPromise(channel, true);
 
         //双向链表
-        tail = new TailContext(this);
-        head = new HeadContext(this);
+        tail = new TailContext(this);  //主要负责收尾工作
+        head = new HeadContext(this);  //主要负责事件的传播工作，一些读写事件 委托给unsafe类操作
 
         head.next = tail;
         tail.prev = head;
@@ -218,6 +218,7 @@ public class DefaultChannelPipeline implements ChannelPipeline {
             // ChannelHandlerContext 对象是 ChannelHandler 和 ChannelPipeline 之间的关联，
             // 每当有 ChannelHandler 添加到 Pipeline 中时，
             // 都会创建 Context。Context 的主要功能是管理他所关联的 Handler 和同一个 Pipeline 中的其他 Handler 之间的交互。
+            // group=null
             newCtx = newContext(group, filterName(name, handler), handler);
 
             //然后将 Context 添加到链表中。也就是追加到 tail 节点的前面。
@@ -238,6 +239,7 @@ public class DefaultChannelPipeline implements ChannelPipeline {
                 executor.execute(new Runnable() {
                     @Override
                     public void run() {
+                        //回调添加完成事件
                         callHandlerAdded0(newCtx);
                     }
                 });
@@ -604,6 +606,7 @@ public class DefaultChannelPipeline implements ChannelPipeline {
     private static void checkMultiplicity(ChannelHandler handler) {
         if (handler instanceof ChannelHandlerAdapter) {
             ChannelHandlerAdapter h = (ChannelHandlerAdapter) handler;
+            //是否是可共享的
             if (!h.isSharable() && h.added) {
                 throw new ChannelPipelineException(
                         h.getClass().getName() +
@@ -615,7 +618,11 @@ public class DefaultChannelPipeline implements ChannelPipeline {
 
     private void callHandlerAdded0(final AbstractChannelHandlerContext ctx) {
         try {
+            //回调用户自己的代码
+            //典型的是 回调ChannelInitializer #handlerAdded
             ctx.handler().handlerAdded(ctx);
+
+            //CAS 自旋
             ctx.setAddComplete();
         } catch (Throwable t) {
             boolean removed = false;
@@ -1210,10 +1217,12 @@ public class DefaultChannelPipeline implements ChannelPipeline {
     }
 
     // A special catch-all handler that handles both bytes and messages.
+    //传播inbound 事件
     final class TailContext extends AbstractChannelHandlerContext implements ChannelInboundHandler {
 
         TailContext(DefaultChannelPipeline pipeline) {
             super(pipeline, null, TAIL_NAME, true, false);
+            //把当前的节点设置为 已添加
             setAddComplete();
         }
 
@@ -1252,11 +1261,13 @@ public class DefaultChannelPipeline implements ChannelPipeline {
 
         @Override
         public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+            //发生异常
             onUnhandledInboundException(cause);
         }
 
         @Override
         public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+            //message 没有处理
             onUnhandledInboundMessage(msg);
         }
 
@@ -1271,12 +1282,14 @@ public class DefaultChannelPipeline implements ChannelPipeline {
 
         HeadContext(DefaultChannelPipeline pipeline) {
             super(pipeline, null, HEAD_NAME, false, true);
+            //底层操作用的
             unsafe = pipeline.channel().unsafe();
             setAddComplete();
         }
 
         @Override
         public ChannelHandler handler() {
+            //说明 底层contest返回的handler 就是其自身
             return this;
         }
 

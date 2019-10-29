@@ -178,11 +178,6 @@ public class ServerBootstrap extends AbstractBootstrap<ServerBootstrap, ServerCh
                         pipeline.addLast(new ServerBootstrapAcceptor(
                                 ch, currentChildGroup, currentChildHandler, currentChildOptions, currentChildAttrs));
                     }
-
-                    @Override
-                    public String toString() {
-                        return "=======线程名字增加监听器pipeline===============";
-                    }
                 };
 
                 ch.eventLoop().execute(runnable);
@@ -249,15 +244,22 @@ public class ServerBootstrap extends AbstractBootstrap<ServerBootstrap, ServerCh
         public void channelRead(ChannelHandlerContext ctx, Object msg) {
             final Channel child = (Channel) msg;
 
+            //添加childHandler
+            //childHandler 是 构建服务端时传入的new ChannelInitializer ，这个是特殊的handle
             child.pipeline().addLast(childHandler);
 
+
+            //构建服务器时传入option(ChannelOption.SO_BACKLOG, 100)
+            //new ServerBootstrapAcceptor 时传入
             setChannelOptions(child, childOptions, logger);
 
             for (Entry<AttributeKey<?>, Object> e : childAttrs) {
                 child.attr((AttributeKey<Object>) e.getKey()).set(e.getValue());
             }
 
+            //childGroup 这里是workgroup
             try {
+                //处理新连接？MultithreadEventLoopGroup
                 childGroup.register(child).addListener(new ChannelFutureListener() {
                     @Override
                     public void operationComplete(ChannelFuture future) throws Exception {

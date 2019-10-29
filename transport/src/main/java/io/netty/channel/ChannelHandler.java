@@ -181,6 +181,7 @@ public interface ChannelHandler {
 
     /**
      * Gets called after the {@link ChannelHandler} was added to the actual context and it's ready to handle events.
+     * 回调函数，加入pipeline时时候的回调
      */
     void handlerAdded(ChannelHandlerContext ctx) throws Exception;
 
@@ -216,5 +217,6 @@ public interface ChannelHandler {
     @Retention(RetentionPolicy.RUNTIME)
     @interface Sharable {
         // no value
+
     }
 }
