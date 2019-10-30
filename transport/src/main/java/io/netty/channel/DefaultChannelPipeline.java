@@ -94,6 +94,8 @@ public class DefaultChannelPipeline implements ChannelPipeline {
     protected DefaultChannelPipeline(Channel channel) {
         //首先将与之关联的Channel保存在属性channel中，
         this.channel = ObjectUtil.checkNotNull(channel, "channel");
+
+        //创建一个 future 和 promise，用于异步回调使用
         succeededFuture = new SucceededChannelFuture(channel, null);
         voidPromise =  new VoidChannelPromise(channel, true);
 
@@ -205,6 +207,17 @@ public class DefaultChannelPipeline implements ChannelPipeline {
         return addLast(null, name, handler);
     }
 
+    /**
+     * 注意，addLast 是个重载方法，你可以选择传入一个线程池，作用是什么呢？
+     * 当你的业务 handler 非常耗时，甚至阻塞线程，那么 Netty 建议你异步执行该任务，否则将会影响 Netty 的性能。
+     * 而这个线程池就是用来执行这个 handler 的耗时任务的。
+     * @param group    the {@link EventExecutorGroup} which will be used to execute the {@link ChannelHandler}
+     *                 methods
+     * @param name     the name of the handler to append
+     * @param handler  the handler to append
+     *
+     * @return
+     */
     @Override
     public final ChannelPipeline addLast(EventExecutorGroup group, String name, ChannelHandler handler) {
         final AbstractChannelHandlerContext newCtx;
@@ -240,6 +253,7 @@ public class DefaultChannelPipeline implements ChannelPipeline {
                     @Override
                     public void run() {
                         //回调添加完成事件
+                        //----
                         callHandlerAdded0(newCtx);
                     }
                 });
@@ -1449,6 +1463,7 @@ public class DefaultChannelPipeline implements ChannelPipeline {
                                 "Can't invoke handlerAdded() as the EventExecutor {} rejected it, removing handler {}.",
                                 executor, ctx.name(), e);
                     }
+                    //这里为什么删除
                     remove0(ctx);
                     ctx.setRemoved();
                 }

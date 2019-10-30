@@ -200,6 +200,10 @@ abstract class AbstractChannelHandlerContext extends DefaultAttributeMap
         return this;
     }
 
+    /**
+     * 返回这个线程池
+     * @param next
+     */
     static void invokeChannelActive(final AbstractChannelHandlerContext next) {
         EventExecutor executor = next.executor();
         if (executor.inEventLoop()) {
@@ -491,6 +495,7 @@ abstract class AbstractChannelHandlerContext extends DefaultAttributeMap
         // 节点的双向链表中从尾节点tail开始向前寻找第一个outbound=true的handler节点
         final AbstractChannelHandlerContext next = findContextOutbound();
         EventExecutor executor = next.executor();
+       //绑定端口用的线程是怎么触发的
         if (executor.inEventLoop()) {
             next.invokeBind(localAddress, promise);
         } else {

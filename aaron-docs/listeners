@@ -1,1 +1,2 @@
 1.Netty推荐使用addListener的方式来回调异步执行的结果，这种方式优于Future.get，能够更精确地把握异步执行结束的时间
+netty的观察者设计模式

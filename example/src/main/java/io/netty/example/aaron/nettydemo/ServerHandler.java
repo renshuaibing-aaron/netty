@@ -33,7 +33,8 @@ public class ServerHandler extends SimpleChannelInboundHandler<String> {
     @Override
     protected void channelRead0(ChannelHandlerContext context, String s)
             throws Exception {
-        System.out.println("当有用户发送消息的时候，对其他的用户发送消息");
+        System.out.println("当有用户发送消息的时候，对其他的用户发送消息,模拟睡眠"+Thread.currentThread());
+        Thread.sleep(20000);
         Channel channel = context.channel();
         //当有用户发送消息的时候，对其他的用户发送消息
         for (Channel ch : group) {

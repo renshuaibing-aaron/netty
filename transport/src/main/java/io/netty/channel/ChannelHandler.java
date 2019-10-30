@@ -182,18 +182,20 @@ public interface ChannelHandler {
     /**
      * Gets called after the {@link ChannelHandler} was added to the actual context and it's ready to handle events.
      * 回调函数，加入pipeline时时候的回调
+     * // 当把 ChannelHandler 添加到 pipeline 时被调用
      */
     void handlerAdded(ChannelHandlerContext ctx) throws Exception;
 
     /**
      * Gets called after the {@link ChannelHandler} was removed from the actual context and it doesn't handle events
      * anymore.
+     * // 当从 pipeline 中移除时调用
      */
     void handlerRemoved(ChannelHandlerContext ctx) throws Exception;
 
     /**
      * Gets called if a {@link Throwable} was thrown.
-     *
+     *    // 当处理过程中在 pipeline 发生异常时调用
      * @deprecated is part of {@link ChannelInboundHandler}
      */
     @Deprecated

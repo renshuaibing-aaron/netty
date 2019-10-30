@@ -44,8 +44,10 @@ public final class EchoServer {
             // Configure the server.
             EventLoopGroup eventLoopGroup = new NioEventLoopGroup(1);
 
+            //MultithreadEventLoopGroup
             EventLoop bossLoop = eventLoopGroup.next();
             EventLoop workLoop = bossLoop;
+
             ServerBootstrap b = new ServerBootstrap();
 
         EchoServerIniterHandler echoServerIniterHandler = new EchoServerIniterHandler();

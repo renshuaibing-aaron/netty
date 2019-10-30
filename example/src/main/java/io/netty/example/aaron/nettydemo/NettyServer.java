@@ -3,6 +3,7 @@ package io.netty.example.aaron.nettydemo;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelOption;
+import io.netty.channel.EventLoop;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
@@ -33,6 +34,7 @@ public class NettyServer {
         EventLoopGroup bossGroup = new NioEventLoopGroup(1);
         //负责处理客户端i/o事件、task任务、监听任务组
         EventLoopGroup workerGroup = new NioEventLoopGroup(2);
+
         //启动 NIO 服务的辅助启动类
         ServerBootstrap bootstrap = new ServerBootstrap();
         //一个是group，一个是channelFactory，在这里可以想一想这两个参数是在哪里以及何时被赋值的？

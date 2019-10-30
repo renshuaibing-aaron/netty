@@ -29,5 +29,9 @@ public class ServerIniterHandler extends ChannelInitializer<SocketChannel> {
         pipeline.addLast("encode", new StringEncoder());
         //聊天服务通道处理
         pipeline.addLast("chat", new ServerHandler());
+
+        //下面这个任务执行的时候，将不会阻塞IO线程，执行的线程来自 group 线程池
+        //验证测试
+       // pipeline.addLast(socketChannel.eventLoop(),"handler",new ServerHandler());
     }
 }

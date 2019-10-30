@@ -53,6 +53,7 @@ public class NettyClient {
                     if (StringUtils.equalsIgnoreCase(content, "q")) {
                         System.exit(1);
                     }
+                    System.out.println(System.currentTimeMillis());
                     channel.writeAndFlush(content);
                 }
             }
