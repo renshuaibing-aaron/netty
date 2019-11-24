@@ -50,13 +50,17 @@ import java.util.Map;
 public abstract class AbstractBootstrap<B extends AbstractBootstrap<B, C>, C extends Channel> implements Cloneable {
 
     volatile EventLoopGroup group;
+
     @SuppressWarnings("deprecation")
     private volatile ChannelFactory<? extends C> channelFactory;
+
     private volatile SocketAddress localAddress;
 
     private final Map<ChannelOption<?>, Object> options = new LinkedHashMap<ChannelOption<?>, Object>();
     private final Map<AttributeKey<?>, Object> attrs = new LinkedHashMap<AttributeKey<?>, Object>();
 
+
+   //.handler(new LoggingHandler(LogLevel.INFO))
     private volatile ChannelHandler handler;
 
     AbstractBootstrap() {
@@ -359,7 +363,9 @@ public abstract class AbstractBootstrap<B extends AbstractBootstrap<B, C>, C ext
         }
 
         //channel的初始化和注册  MultithreadEventLoopGroup
+        //拿到一个线程loop 去注册
         ChannelFuture regFuture = config().group().register(channel);
+
         if (regFuture.cause() != null) {
             if (channel.isRegistered()) {
                 channel.close();

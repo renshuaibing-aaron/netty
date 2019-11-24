@@ -34,8 +34,12 @@ public class ServerBootstrap extends AbstractBootstrap<ServerBootstrap, ServerCh
 
     private final Map<ChannelOption<?>, Object> childOptions = new LinkedHashMap<ChannelOption<?>, Object>();
     private final Map<AttributeKey<?>, Object> childAttrs = new LinkedHashMap<AttributeKey<?>, Object>();
+
     private final ServerBootstrapConfig config = new ServerBootstrapConfig(this);
+
     private volatile EventLoopGroup childGroup;
+
+    //初始化增加一个handler
     private volatile ChannelHandler childHandler;
 
     public ServerBootstrap() {
@@ -131,6 +135,7 @@ public class ServerBootstrap extends AbstractBootstrap<ServerBootstrap, ServerCh
         System.out.println("===channel init=======");
         // //1、设置新接入channel的option,TCP 参数
         final Map<ChannelOption<?>, Object> options = options0();
+
         synchronized (options) {
             setChannelOptions(channel, options, logger);
         }
@@ -144,6 +149,7 @@ public class ServerBootstrap extends AbstractBootstrap<ServerBootstrap, ServerCh
                 channel.attr(key).set(e.getValue());
             }
         }
+
 
         //3、设置handler到pipeline上
         ChannelPipeline p = channel.pipeline();
@@ -165,8 +171,10 @@ public class ServerBootstrap extends AbstractBootstrap<ServerBootstrap, ServerCh
         p.addLast(new ChannelInitializer<Channel>() {
             @Override
             public void initChannel(final Channel ch) throws Exception {
+                System.out.println("=======第一次add保存成任务===================");
                 final ChannelPipeline pipeline = ch.pipeline();
                 ChannelHandler handler = config.handler();
+                //此时获取的便是Loggerhandler
                 if (handler != null) {
                     pipeline.addLast(handler);
                 }
@@ -184,7 +192,6 @@ public class ServerBootstrap extends AbstractBootstrap<ServerBootstrap, ServerCh
             }
         });
 
-        System.out.println("===========ceshi================");
     }
 
     @Override
@@ -239,17 +246,21 @@ public class ServerBootstrap extends AbstractBootstrap<ServerBootstrap, ServerCh
             };
         }
 
+        //什么时候获取连接
         @Override
         @SuppressWarnings("unchecked")
         public void channelRead(ChannelHandlerContext ctx, Object msg) {
-            final Channel child = (Channel) msg;
+
+            System.out.println("-=---------ServerBootstrapAcceptor #channelRead 方法 --------------");
+            final Channel child = (Channel) msg;  //NioSocketChannel
 
             //添加childHandler
             //childHandler 是 构建服务端时传入的new ChannelInitializer ，这个是特殊的handle
+            //添加 NioSocketChannel 的 pipeline 的 handler ，就是我们 main 方法里面设置的 childHandler 方法里的
             child.pipeline().addLast(childHandler);
 
 
-            //构建服务器时传入option(ChannelOption.SO_BACKLOG, 100)
+            //构建服务器时传入option(ChannelOption.SO_BACKLOG, 100)  设置 NioSocketChannel 的各种属性
             //new ServerBootstrapAcceptor 时传入
             setChannelOptions(child, childOptions, logger);
 
@@ -260,6 +271,10 @@ public class ServerBootstrap extends AbstractBootstrap<ServerBootstrap, ServerCh
             //childGroup 这里是workgroup
             try {
                 //处理新连接？MultithreadEventLoopGroup
+                //将客户端连接注册到 worker 线程池
+                //将该 NioSocketChannel 注册到 childGroup 中的一个 EventLoop 上，并添加一个监听器
+                //childGroup 这个就是在创建这个对象时创建的
+                //MultithreadEventLoopGroup#register
                 childGroup.register(child).addListener(new ChannelFutureListener() {
                     @Override
                     public void operationComplete(ChannelFuture future) throws Exception {

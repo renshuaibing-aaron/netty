@@ -138,6 +138,7 @@ abstract class AbstractChannelHandlerContext extends DefaultAttributeMap
 
     static void invokeChannelRegistered(final AbstractChannelHandlerContext next) {
         EventExecutor executor = next.executor();
+
         if (executor.inEventLoop()) {
             next.invokeChannelRegistered();
         } else {
@@ -846,6 +847,7 @@ abstract class AbstractChannelHandlerContext extends DefaultAttributeMap
 
     @Override
     public ChannelFuture writeAndFlush(Object msg) {
+        System.out.println("========writeAndFlush===========");
         return writeAndFlush(msg, newPromise());
     }
 

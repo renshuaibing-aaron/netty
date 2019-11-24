@@ -80,12 +80,13 @@ public abstract class AbstractNioChannel extends AbstractChannel {
 
     /**
      * Create a new instance
-     *
+     * 这一段服务端和客户端是一样的？
      * @param parent            the parent {@link Channel} by which this instance was created. May be {@code null}
      * @param ch                the underlying {@link SelectableChannel} on which it operates
      * @param readInterestOp    the ops to set to receive data from the {@link SelectableChannel}
      */
     protected AbstractNioChannel(Channel parent, SelectableChannel ch, int readInterestOp) {
+        //null
         super(parent);
         //JDK
         this.ch = ch;
@@ -390,9 +391,13 @@ public abstract class AbstractNioChannel extends AbstractChannel {
     @Override
     protected void doRegister() throws Exception {
         boolean selected = false;
+
+        //注意这里是个死循环，只有注册成功了才返回，这里为什么是0
         for (;;) {
             try {
                 //javaChannel()方法返回的ch为实例化NioServerSocketChannel时产生的一个SocketChannelImpl类的实例，并设置为非阻塞的
+
+                //客户端链接时 返回的是NioSocketChannel  注册读事件
                 selectionKey = javaChannel().register(eventLoop().unwrappedSelector(), 0, this);
 
                 return;

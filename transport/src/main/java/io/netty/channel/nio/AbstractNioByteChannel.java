@@ -112,22 +112,39 @@ public abstract class AbstractNioByteChannel extends AbstractNioChannel {
         @Override
         public final void read() {
             //这里是读取数据（注意和服务端的区别）
+
+            //1.获取到 Channel 的 config 对象，并从该对象中获取内存分配器，还有”计算内存分配器”
             final ChannelConfig config = config();
             final ChannelPipeline pipeline = pipeline();
+
+            // 用来处理内存的分配:池化或者非池化 UnpooledByteBufAllocator
+            //主要作用是创建 ByteBuf
             final ByteBufAllocator allocator = config.getAllocator();
+
+            // 用来计算此次读循环应该分配多少内存 AdaptiveRecvByteBufAllocator 自适应计算缓冲分配
             final RecvByteBufAllocator.Handle allocHandle = recvBufAllocHandle();
+
+            // 重置为0
+            //2.将 计算内存分配器 重置
             allocHandle.reset(config);
 
+            //ByteBuf 是 Netty 用来替代 NIO 的 ByteBuffer 的，是存储数据的缓存区
             ByteBuf byteBuf = null;
             boolean close = false;
             try {
                 do {
                     byteBuf = allocHandle.allocate(allocator);
                     allocHandle.lastBytesRead(doReadBytes(byteBuf));
+
+                    // 如果上一次读到的字节数小于等于0，清理引用和跳出循环
                     if (allocHandle.lastBytesRead() <= 0) {
                         // nothing was read. release the buffer.
+
+                        // 引用 -1
                         byteBuf.release();
                         byteBuf = null;
+
+                        // 如果远程已经关闭连接
                         close = allocHandle.lastBytesRead() < 0;
                         if (close) {
                             // There is nothing left to read as we received an EOF.
@@ -138,11 +155,17 @@ public abstract class AbstractNioByteChannel extends AbstractNioChannel {
 
                     allocHandle.incMessagesRead(1);
                     readPending = false;
+                    //从缓存里面读取信息 以此进入pipeline
+                    System.out.println("==========11111============");
                     pipeline.fireChannelRead(byteBuf);
+                    System.out.println("==========2222==========");
                     byteBuf = null;
                 } while (allocHandle.continueReading());
 
+                //4.跳出循环后，调用 allocHandle 的 readComplete 方法，表示读取已完成，并记录读取记录，用于下次分配合理内存。
                 allocHandle.readComplete();
+
+                //5.调用 pipeline 的方法
                 pipeline.fireChannelReadComplete();
 
                 if (close) {

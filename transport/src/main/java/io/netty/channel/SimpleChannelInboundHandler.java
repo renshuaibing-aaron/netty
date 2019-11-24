@@ -97,6 +97,7 @@ public abstract class SimpleChannelInboundHandler<I> extends ChannelInboundHandl
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+        System.out.println("------SimpleChannelInboundHandler#channelRead  这里主要可以进行手动释放内存-----------");
         boolean release = true;
         try {
             if (acceptInboundMessage(msg)) {

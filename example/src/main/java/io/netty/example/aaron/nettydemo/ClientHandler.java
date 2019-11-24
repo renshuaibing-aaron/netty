@@ -17,6 +17,6 @@ public class ClientHandler extends SimpleChannelInboundHandler<String> {
     protected void channelRead0(ChannelHandlerContext ctx, String s) throws Exception {
         //打印服务端的发送数据
         System.out.println(System.currentTimeMillis());
-        System.out.println(s);
+        System.out.println("=======打印服务端的发送数据==========="+s);
     }
 }

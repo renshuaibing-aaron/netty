@@ -82,6 +82,8 @@ public class DefaultChannelPipeline implements ChannelPipeline {
      * We only keep the head because it is expected that the list is used infrequently and its size is small.
      * Thus full iterations to do insertions is assumed to be a good compromised to saving memory and tail management
      * complexity.
+     *
+     * 这个是什么玩意？
      */
     private PendingHandlerCallback pendingHandlerCallbackHead;
 
@@ -240,13 +242,17 @@ public class DefaultChannelPipeline implements ChannelPipeline {
             // If the registered is false it means that the channel was not registered on an eventloop yet.
             // In this case we add the context to the pipeline and add a task that will call
             // ChannelHandler.handlerAdded(...) once the channel is registered.
+            //第一次走到这 没有注册，pipeline和channel没有形成关系
+            // 这里的注册是指 pipe中的channel 没有注册到selector上
             if (!registered) {
                 newCtx.setAddPending();
+                //added 属性包装成一个 task（add 任务或 removed 任务），成为任务链表上的一个节点。
                 callHandlerCallbackLater(newCtx, true);
                 return this;
             }
 
             EventExecutor executor = newCtx.executor();
+
             if (!executor.inEventLoop()) {
                 newCtx.setAddPending();
                 executor.execute(new Runnable() {
@@ -634,6 +640,7 @@ public class DefaultChannelPipeline implements ChannelPipeline {
         try {
             //回调用户自己的代码
             //典型的是 回调ChannelInitializer #handlerAdded
+            //   SimpleServerHandler#handlerAdded
             ctx.handler().handlerAdded(ctx);
 
             //CAS 自旋
@@ -965,6 +972,7 @@ public class DefaultChannelPipeline implements ChannelPipeline {
 
     @Override
     public final ChannelPipeline fireChannelRead(Object msg) {
+        //第一次执行 是head节点  msg 这里是容器里面的连接
         AbstractChannelHandlerContext.invokeChannelRead(head, msg);
         return this;
     }
@@ -1162,6 +1170,8 @@ public class DefaultChannelPipeline implements ChannelPipeline {
         // holding the lock and so produce a deadlock if handlerAdded(...) will try to add another handler from outside
         // the EventLoop.
         PendingHandlerCallback task = pendingHandlerCallbackHead;
+
+        //这里执行的就是那个监听端口
         while (task != null) {
             task.execute();
             task = task.next;
@@ -1282,6 +1292,7 @@ public class DefaultChannelPipeline implements ChannelPipeline {
         @Override
         public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
             //message 没有处理
+            System.out.println("===========In进入到尾节点进行处理==================");
             onUnhandledInboundMessage(msg);
         }
 
@@ -1370,8 +1381,10 @@ public class DefaultChannelPipeline implements ChannelPipeline {
             ctx.fireExceptionCaught(cause);
         }
 
+
         @Override
         public void channelRegistered(ChannelHandlerContext ctx) throws Exception {
+
             invokeHandlerAddedIfNeeded();
             ctx.fireChannelRegistered();
         }
@@ -1452,6 +1465,7 @@ public class DefaultChannelPipeline implements ChannelPipeline {
         @Override
         void execute() {
             EventExecutor executor = ctx.executor();
+            //第一次走到这返回true？
             if (executor.inEventLoop()) {
                 callHandlerAdded0(ctx);
             } else {

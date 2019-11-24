@@ -68,6 +68,7 @@ public class NioServerSocketChannel extends AbstractNioMessageChannel
 
     /**
      * Create a new instance
+     * 利用反射构造函数
      */
     public NioServerSocketChannel() {
 
@@ -84,13 +85,15 @@ public class NioServerSocketChannel extends AbstractNioMessageChannel
 
     /**
      * Create a new instance using the given {@link ServerSocketChannel}.
+     *
+     * 原生的ServerSocketChannel
      */
     public NioServerSocketChannel(ServerSocketChannel channel) {
 
         //设置SelectionKey.OP_ACCEPT事件
         super(null, channel, SelectionKey.OP_ACCEPT);
         //设置了config属性
-        //这个 config 对象用于配置这个 NioServerSocketChannel ，用于外部获取参数和配置
+        //这个 config 对象用于配置这个 NioServerSocketChannel ，用于外部获取参数和配置？？
         config = new NioServerSocketChannelConfig(this, javaChannel().socket());
     }
 

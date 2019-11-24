@@ -238,7 +238,7 @@ public class OcspClientExample {
                 .append("\n  Cert Serial: ").append(certSerial)
                 .append("\n  OCSP Serial: ").append(ocspSerial)
                 .toString();
-            System.out.println(message);
+            System.out.println("*********8"+message);
 
             return status == CertificateStatus.GOOD && certSerial.equals(ocspSerial);
         }

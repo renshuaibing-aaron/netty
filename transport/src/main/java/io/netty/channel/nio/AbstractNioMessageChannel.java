@@ -72,7 +72,7 @@ public abstract class AbstractNioMessageChannel extends AbstractNioChannel {
         public void read() {
             System.out.println("=======这里获取一个连接==========");
             //这里的读是读取一个连接
-            //首先判断是nio 内部线程进行
+            //首先判断是nio 内部线程进行(检查该 eventloop 线程是否是当前线程)
             assert eventLoop().inEventLoop();
             final ChannelConfig config = config();
             final ChannelPipeline pipeline = pipeline();
@@ -91,6 +91,7 @@ public abstract class AbstractNioMessageChannel extends AbstractNioChannel {
                         //这里拿到jdk的channel
                         //NioServerSocketChannel 里面执行
                         int localRead = doReadMessages(readBuf);
+                        System.out.println("======获取到新的连接============="+localRead);
                         if (localRead == 0) {
                             break;
                         }
@@ -99,6 +100,7 @@ public abstract class AbstractNioMessageChannel extends AbstractNioChannel {
                             break;
                         }
 
+                        //这个是干嘛的？
                         allocHandle.incMessagesRead(localRead);
 
                     } while (allocHandle.continueReading());
@@ -109,6 +111,10 @@ public abstract class AbstractNioMessageChannel extends AbstractNioChannel {
                 int size = readBuf.size();
                 for (int i = 0; i < size; i ++) {
                     readPending = false;
+                    //循环执行 pipeline.fireChannelRead 方法
+                    //readBuf 这个里面放的是新建立的连接  执行管道里面的ChannelRead
+
+                    //pipeline 里面又 4 个 handler ，分别是 Head，LoggingHandler，ServerBootstrapAcceptor，Tail
                     pipeline.fireChannelRead(readBuf.get(i));
                 }
                 readBuf.clear();

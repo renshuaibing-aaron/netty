@@ -20,6 +20,8 @@ import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 
+import java.io.UnsupportedEncodingException;
+
 /**
  * Handler implementation for the echo client.  It initiates the ping-pong
  * traffic between the echo client and server by sending the first message to
@@ -41,12 +43,19 @@ public class EchoClientHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) {
-        ctx.writeAndFlush(firstMessage);
+
+        ctx.writeAndFlush(Unpooled.copiedBuffer(("Hello i am clint").getBytes()));
+        //ctx.writeAndFlush(firstMessage);
     }
 
     @Override
-    public void channelRead(ChannelHandlerContext ctx, Object msg) {
+    public void channelRead(ChannelHandlerContext ctx, Object msg) throws UnsupportedEncodingException {
         System.out.println("===channelRead收到消息========="+msg.toString());
+        ByteBuf buf=(ByteBuf)msg;
+        byte[] req=new byte[buf.readableBytes()];
+        buf.readBytes(req);
+        String body=new String (req,"UTF-8");
+        System.out.println(body);
        // ctx.write(msg);
     }
 

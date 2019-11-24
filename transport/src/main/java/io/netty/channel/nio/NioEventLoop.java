@@ -414,7 +414,7 @@ public final class NioEventLoop extends SingleThreadEventLoop {
      */
     @Override
     protected void run() {
-        System.out.println("===========NioEventLoop循环执行是不是从中取任务然后执行==========="+Thread.currentThread());
+        //NioEventLoop循环执行是不是从中取任务然后执行
         for (;;) {
             try {
                 //// 当有任务时为了保证任务及时执行采用不阻塞的selectNow获取准备好I/O的连接
@@ -676,9 +676,13 @@ public final class NioEventLoop extends SingleThreadEventLoop {
 
             // Also check for readOps of 0 to workaround possible JDK bug which may otherwise lead
             // to a spin loop
-            //处理连接事件
+            //处理连接事件   readyOps=16  SelectionKey.OP_ACCEPT
+            System.out.println((readyOps & (SelectionKey.OP_READ | SelectionKey.OP_ACCEPT)) != 0 || readyOps == 0);
             if ((readyOps & (SelectionKey.OP_READ | SelectionKey.OP_ACCEPT)) != 0 || readyOps == 0) {
                 //NioMessageUnsafe
+                System.out.println("=====readyOpsreadyOps==========="+readyOps);
+                System.out.println("=====这里是处理连接还是读写========"+unsafe);
+
                 unsafe.read();
             }
         } catch (CancelledKeyException ignored) {

@@ -67,7 +67,11 @@ public abstract class AbstractChannel extends DefaultAttributeMap implements Cha
 
     private volatile SocketAddress localAddress;
     private volatile SocketAddress remoteAddress;
+
+    //这是什么时候赋值
     private volatile EventLoop eventLoop;
+
+    //注册过之后设置
     private volatile boolean registered;
     private boolean closeInitiated;
 
@@ -467,6 +471,8 @@ public abstract class AbstractChannel extends DefaultAttributeMap implements Cha
             return remoteAddress0();
         }
 
+        //之所以使用 promise,register 内部肯定时异步执行了某个方法，让 promise 立刻返回
+        //执行完毕后再执行设置的监听器的方法
         @Override
         public final void register(EventLoop eventLoop, final ChannelPromise promise) {
             System.out.println("========AbstractChannel#AbstractUnsafe.register==============");
@@ -488,7 +494,8 @@ public abstract class AbstractChannel extends DefaultAttributeMap implements Cha
             AbstractChannel.this.eventLoop = eventLoop;
 
             //判断当前线程是否为该EventLoop中拥有的线程，如果是，则直接注册，如果不是，则添加一个任务到该线程中
-            //为什么
+            //(客户端注册)
+            //同步或者异步的调用 register0 方法。此时的线程是 boss 线程，而不是 worder 线程，所以肯定无法通过 inEventLoop 判断
             boolean b = eventLoop.inEventLoop();
             System.out.println("=========断当前线程是否为该EventLoop中拥有的线程============="+b);
             if (eventLoop.inEventLoop()) {
@@ -533,19 +540,29 @@ public abstract class AbstractChannel extends DefaultAttributeMap implements Cha
                     return;
                 }
                 boolean firstRegistration = neverRegistered;
-                //通过调用doRegister()方法完成NioServerSocketChannel的注册
+                //通过调用AbstractNioChannel#doRegister()方法完成NioServerSocketChannel的注册
+                //注册到selector上
                 doRegister();
                 neverRegistered = false;
                 registered = true;
 
                 // Ensure we call handlerAdded(...) before we actually notify the promise. This is needed as the
                 // user may already fire events through the pipeline in the ChannelFutureListener.
-                //这里是什么
+                //这里是什么，执行在添加pipeline时没有执行的方法
+
+                //客户端链接时 执行管道中可能存在的任务
+                System.out.println("=========执行管道中可能存在的任务==============");
                 pipeline.invokeHandlerAddedIfNeeded();
 
+
+                // promise 已经成功了，你可以执行监听器的方法了，而这里的监听器则是我们的 dobind 方法中设置的
                 safeSetSuccess(promise);
 
+                //执行 handler 的注册成功之后的回调方法
+                System.out.println("======执行 handler 的注册成功之后的回调方法==========");
                 pipeline.fireChannelRegistered();
+
+                System.out.println("======**************==========");
                 // Only fire a channelActive if the channel has never been registered. This prevents firing
                 // multiple channel actives if the channel is deregistered and re-registered.
                 if (isActive()) {

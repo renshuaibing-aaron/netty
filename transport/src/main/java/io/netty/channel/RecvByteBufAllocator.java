@@ -30,6 +30,7 @@ public interface RecvByteBufAllocator {
     /**
      * Creates a new handle.  The handle provides the actual operations and keeps the internal information which is
      * required for predicting an optimal buffer capacity.
+     * 创建一个新的句柄。句柄提供了实际操作，并保留了用于预测最佳缓冲区容量所需的内部信息。
      */
     Handle newHandle();
 

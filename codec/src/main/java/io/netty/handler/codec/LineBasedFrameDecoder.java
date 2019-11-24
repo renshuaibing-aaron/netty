@@ -26,6 +26,7 @@ import java.util.List;
  * <p>
  * Both {@code "\n"} and {@code "\r\n"} are handled.
  * For a more general delimiter-based decoder, see {@link DelimiterBasedFrameDecoder}.
+ * 基于行解码器的分析 可以解决粘包问题
  */
 public class LineBasedFrameDecoder extends ByteToMessageDecoder {
 

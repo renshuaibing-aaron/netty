@@ -242,6 +242,7 @@ import java.nio.charset.UnsupportedCharsetException;
  *
  * <h4>I/O Streams</h4>
  *
+ * 底层如何实现的
  * Please refer to {@link ByteBufInputStream} and
  * {@link ByteBufOutputStream}.
  */

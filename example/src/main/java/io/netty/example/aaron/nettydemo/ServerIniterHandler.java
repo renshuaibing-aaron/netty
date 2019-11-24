@@ -23,11 +23,12 @@ public class ServerIniterHandler extends ChannelInitializer<SocketChannel> {
         System.out.println("=========注册pipe=========");
         //管道注册handler
         ChannelPipeline pipeline = socketChannel.pipeline();
-        //编码通道处理
+        //解码通道处理   ChannelInboundHandlerAdapter
         pipeline.addLast("decode", new StringDecoder());
-        //转码通道处理
+
+        //编码通道处理   ChannelOutboundHandlerAdapter
         pipeline.addLast("encode", new StringEncoder());
-        //聊天服务通道处理
+        //聊天服务通道处理   ChannelInboundHandler
         pipeline.addLast("chat", new ServerHandler());
 
         //下面这个任务执行的时候，将不会阻塞IO线程，执行的线程来自 group 线程池

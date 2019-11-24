@@ -137,6 +137,7 @@ public class LoggingHandler extends ChannelDuplexHandler {
 
     @Override
     public void channelRegistered(ChannelHandlerContext ctx) throws Exception {
+        System.out.println("=======LoggingHandler#channelRegistered=============");
         if (logger.isEnabled(internalLevel)) {
             logger.log(internalLevel, format(ctx, "REGISTERED"));
         }
