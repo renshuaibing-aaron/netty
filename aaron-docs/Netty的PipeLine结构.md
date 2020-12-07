@@ -1,0 +1,11 @@
+1.一个标准的pipeline链式结构如下
+查看pipeline.webp文件
+数据从head节点流入，先拆包，然后解码成业务对象，最后经过业务Handler处理，调用write，将结果对象写出去。
+而写的过程先通过tail节点，然后通过encoder节点将对象编码成ByteBuf，最后将该ByteBuf对象传递到head节点，
+调用底层的Unsafe写到jdk底层管道
+
+首先，用一个spliter将来源TCP数据包拆包，然后将拆出来的包进行decoder，传入业务处理器BusinessHandler，业务处理完encoder，输出
+pipeline中两种不同类型的节点，一个是 ChannelInboundHandler，处理inBound事件，最典型的就是读取数据流，加工处理；还有一种类型的Handler是 ChannelOutboundHandler, 处理outBound事件，比如当调用writeAndFlush()类方法时，就会经过该种类型的handler
+
+初步解释为什么head节点是out类型：待写出的数据从tail节点开始直到head节点 然后利用head节点中的unsafe写到socket缓冲区
+            tail节点是in类型：从socket缓冲区读到的数据会从head开始流入 直到tail节点 利用tail节点进行收尾工作(数据不一定会流到tail节点)

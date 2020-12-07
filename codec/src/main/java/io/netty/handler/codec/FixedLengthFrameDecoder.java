@@ -1,0 +1,72 @@
+package io.netty.handler.codec;
+
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandlerContext;
+
+import java.util.List;
+
+/**
+ * A decoder that splits the received {@link ByteBuf}s by the fixed number
+ * of bytes. For example, if you received the following four fragmented packets:
+ * <pre>
+ * +---+----+------+----+
+ * | A | BC | DEFG | HI |
+ * +---+----+------+----+
+ * </pre>
+ * A {@link FixedLengthFrameDecoder}{@code (3)} will decode them into the
+ * following three packets with the fixed length:
+ * <pre>
+ * +-----+-----+-----+
+ * | ABC | DEF | GHI |
+ * +-----+-----+-----+
+ * </pre>
+ * 基于固定长度的解码器
+ */
+public class FixedLengthFrameDecoder extends ByteToMessageDecoder {
+
+    //固定长度
+    private final int frameLength;
+
+    /**
+     * Creates a new instance.
+     *
+     * @param frameLength the length of the frame
+     */
+    public FixedLengthFrameDecoder(int frameLength) {
+        if (frameLength <= 0) {
+            throw new IllegalArgumentException(
+                    "frameLength must be a positive integer: " + frameLength);
+        }
+        this.frameLength = frameLength;
+    }
+
+    @Override
+    protected final void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
+       //解码
+        Object decoded = decode(ctx, in);
+        if (decoded != null) {
+
+            //生成的对象list
+            out.add(decoded);
+        }
+    }
+
+    /**
+     * Create a frame out of the {@link ByteBuf} and return it.
+     *
+     * @param   ctx             the {@link ChannelHandlerContext} which this {@link ByteToMessageDecoder} belongs to
+     * @param   in              the {@link ByteBuf} from which to read data
+     * @return  frame           the {@link ByteBuf} which represent the frame or {@code null} if no frame could
+     *                          be created.
+     */
+    protected Object decode(
+            @SuppressWarnings("UnusedParameters") ChannelHandlerContext ctx, ByteBuf in) throws Exception {
+        //累加器里的值小于长度
+        if (in.readableBytes() < frameLength) {
+            return null;
+        } else {
+            //从累加器 截取ByteBuf  说明返回的list里面带有的就是ByteBuffer对象
+            return in.readRetainedSlice(frameLength);
+        }
+    }
+}

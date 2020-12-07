@@ -1,0 +1,28 @@
+1.首先可以知道JDK原生的是ByteBuffer  在Netty中优化后的是ByteBuf
+
+在原生的ByteBuffer里面  只有一个指针position ，直观上看仅用一个指针就实现了两个指针的功能，但是对于ByteBuffer读写状态
+切换的时候必须调用flip方法，并且当下一次写之前，必须将Buffer里面的内容读完，再调用clear方法。在每次读之前调用flip，写之前调用clear，太麻烦，并且没有读完无法写操作
+
+
+在netty里面,重新实现了ByteBuf 读写指针分别为readerIndex和writeIndex 读的时候仅仅依赖readerIndex指针，写的时候仅仅依赖writerIndex指针，不需每次读写之前调用对应的方法，而且没有必须一次读完的限制
+
+
+2.零拷贝技术
+Netty的接收和发送ByteBuffer采用DIRECT BUFFERS，使用堆外直接内存进行Socket读写，不需要进行字节缓冲区的二次拷贝。
+如果使用传统的堆内存（HEAP BUFFERS）进行Socket读写，JVM会将堆内存Buffer拷贝一份到直接内存中，然后才写入Socket中。相比于堆外直接内存，消息在发送过程中多了一次缓冲区的内存拷贝。
+Netty提供了组合Buffer对象，可以聚合多个ByteBuffer对象，用户可以像操作一个Buffer那样方便的对组合Buffer进行操作，避免了传统通过内存拷贝的方式将几个小Buffer合并成一个大的Buffer。
+Netty的文件传输采用了transferTo方法，它可以直接将文件缓冲区的数据发送到目标Channel，避免了传统通过循环write方式导致的内存拷贝问题。
+
+
+3.引用计数与池化技术
+
+在Netty中，每个被申请的Buffer对于Netty来说都可能是很宝贵的资源，因此为了获得对于内存的申请与回收更多的控制权，Netty自己根据引用计数法去实现了内存的管理。
+Netty对于Buffer的使用都是基于直接内存（DirectBuffer）实现的，大大提高I/O操作的效率
+然而DirectBuffer和HeapBuffer相比之下除了I/O操作效率高之外还有一个天生的缺点，即对于DirectBuffer的申请相比HeapBuffer效率更低
+因此Netty结合引用计数实现了PolledBuffer，即池化的用法，当引用计数等于0的时候，Netty将Buffer回收致池中，在下一次申请Buffer的没某个时刻会被复用。
+
+
+
+
+4.netty中的内存分配用的是ByteBuf 这个是比较底层的结构 举例说明内存类别有哪些  如何减少线程内存之间的分配竞争
+
